@@ -9,7 +9,7 @@ import { useOG } from "../context";
 const StyledHome = styled.div(css({}));
 
 const Home = () => {
-  const { tags } = useOG();
+  const { tags, error } = useOG();
 
   return (
     <StyledHome>
@@ -18,6 +18,7 @@ const Home = () => {
       <UrlForm />
 
       {tags != null && <TagsDisplay />}
+      {error != null && error}
     </StyledHome>
   );
 };

@@ -5,6 +5,7 @@ import { MetaTag } from "./types";
 export interface OGState {
   url: string;
   isUrlError: boolean;
+  error: string;
   setUrl: (value: string) => void;
   fetchTags: () => void;
   tags: MetaTag[] | null;
@@ -19,6 +20,7 @@ export const useOG = (): OGState => {
 
 export const OGProvider: React.FC = props => {
   const [url, setUrl] = React.useState("https://jakerunzer.com");
+  const [error, setError] = React.useState<string | null>(null);
   const [isUrlError, setIsUrlError] = React.useState(false);
 
   const [tags, setTags] = React.useState<MetaTag[] | null>(null);
@@ -29,17 +31,23 @@ export const OGProvider: React.FC = props => {
     }
 
     const query = `page=${encodeURIComponent(url)}`;
-    const { tags } = await fetch(`/api/html?${query}`).then(res => res.json());
+    const json = await fetch(`/api/html?${query}`).then(res => res.json());
 
-    setTags(tags);
+    if (json.error != null) {
+      setError(json.error);
+    } else {
+      setTags(json.tags);
+      setError(null);
+    }
   };
 
   const value: OGState = {
     url,
     isUrlError,
+    error,
     setUrl: value => {
       setUrl(value);
-      setIsUrlError(url !== "" && !validUrl(url));
+      setIsUrlError(value !== "" && !validUrl(value));
     },
     fetchTags,
     tags,
