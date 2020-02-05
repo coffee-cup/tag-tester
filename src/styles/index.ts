@@ -31,6 +31,7 @@ const theme: Theme = {
     secondary: "text",
     muted: "#eff0f6",
     grey: "#a2a2a2",
+    error: "red",
   },
   breakpoints: ["40em", "52em", "64em"],
   fontWeights: {
@@ -95,6 +96,16 @@ const theme: Theme = {
 
       "&:hover": {
         opacity: 0.6,
+      },
+    },
+    buttons: {
+      primary: {
+        color: "orange",
+        bg: "primary",
+        transition: "background-color 250ms ease-in-out",
+        "&:hover": {
+          bg: "text",
+        },
       },
     },
     p: {

@@ -1,4 +1,4 @@
-export const validURL = (str: string): boolean => {
+export const validUrl = (str: string): boolean => {
   var pattern = new RegExp(
     "^(https?:\\/\\/)?" + // protocol
     "((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|" + // domain name

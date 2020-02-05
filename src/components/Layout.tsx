@@ -3,6 +3,7 @@ import { ThemeProvider, Styled } from "theme-ui";
 import theme from "../styles";
 import styled from "@emotion/styled";
 import css from "@styled-system/css";
+import { OGProvider } from "../context";
 
 const Content = styled(Styled.root)(
   css({
@@ -16,8 +17,14 @@ const Content = styled(Styled.root)(
 
 const Layout: React.FC = props => (
   <ThemeProvider theme={theme}>
-    <Content>{props.children}</Content>
+    <OGProvider>
+      <Content>{props.children}</Content>
+    </OGProvider>
   </ThemeProvider>
 );
 
-export default Layout;
+export const withLayout = (Wrapped: React.ComponentType) => () => (
+  <Layout>
+    <Wrapped />
+  </Layout>
+);

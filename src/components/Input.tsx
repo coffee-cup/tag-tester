@@ -1,7 +1,25 @@
-/* import styled from "@emotion/styled";
- * import css from "@styled-system/css"; */
-import { Input as TInput } from "theme-ui";
+import styled from "@emotion/styled";
+import css from "@styled-system/css";
 
-/* const Input = styled(TInput)<{ large?: boolean }>(props => css({})); */
+export interface Props {
+  large?: boolean;
+  error?: boolean;
+}
 
-export default TInput;
+const Input = styled.input<Props>(props =>
+  css({
+    appearance: "none",
+    width: props.large ? "100%" : "auto",
+    px: 3,
+    py: 2,
+    fontSize: 2,
+    border: "solid 1px",
+    borderRadius: "2px",
+
+    transition: "border-color 250ms ease-in-out",
+
+    borderColor: props.error ? "error" : "grey",
+  }),
+);
+
+export default Input;
