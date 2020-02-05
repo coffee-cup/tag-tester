@@ -5,6 +5,7 @@ import Layout from "../components/Layout";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { validURL } from "../utils";
+import { Label } from "theme-ui";
 
 const StyledHome = styled.div(css({}));
 
@@ -27,9 +28,9 @@ const Home = () => {
         return;
       }
 
-      const html = await fetch(url, {
-        mode: "cors",
-      }).then(res => res.text());
+      const query = `page=${encodeURIComponent(url)}`;
+
+      const html = await fetch(`/api/html?${query}`).then(res => res.json());
       console.log(html);
     })();
   };
@@ -45,13 +46,14 @@ const Home = () => {
             fetchOgData();
           }}
         >
+          <Label htmlFor="url">page url</Label>
           <Input
+            name="url"
             value={url}
             placeholder="URL you want to test"
             onChange={e => {
               setUrl(e.target.value);
             }}
-            large
           />
 
           <Button primary>Go</Button>
