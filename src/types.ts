@@ -6,3 +6,8 @@ export interface MetaTag {
   category: MetaCategory;
   content?: string;
 }
+
+export interface Results {
+  url: string;
+  tags: MetaTag[];
+}

@@ -11,13 +11,12 @@ const StyledHeader = styled.header(
     color: "white",
     mb: 3,
     py: 6,
-    px: 3,
   }),
 );
 
 const Title = styled.h1(
   css({
-    mb: 4,
+    mb: 3,
   }),
 );
 

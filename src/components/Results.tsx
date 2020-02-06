@@ -4,8 +4,9 @@ import css from "@styled-system/css";
 import { useOG } from "../context";
 import { Styled } from "theme-ui";
 import { MetaTag } from "../types";
+import Section from "./Section";
 
-const StyledTagsDisplay = styled.div(
+const StyledResults = styled.div(
   css({
     whiteSpace: "pre",
     my: 2,
@@ -29,6 +30,7 @@ const Cell = styled(Styled.td)(css({}));
 const TableTitle = styled.h3(
   css({
     bg: "secondary",
+    mt: 0,
     mb: 2,
     p: 2,
   }),
@@ -41,12 +43,18 @@ const TableImage = styled.img(
   }),
 );
 
+const StyledTagTable = styled.div(
+  css({
+    pb: 4,
+  }),
+);
+
 const TagTable: React.FC<{
   title: string;
   nameProp: string;
   tags: MetaTag[];
 }> = ({ title, nameProp, tags }) => (
-  <div>
+  <StyledTagTable>
     <TableTitle>{title}</TableTitle>
 
     <Table>
@@ -72,23 +80,50 @@ const TagTable: React.FC<{
         ))}
       </tbody>
     </Table>
-  </div>
+  </StyledTagTable>
 );
 
-const TagsDisplay = () => {
-  const { tags } = useOG();
+const Info = () => {
+  const { results } = useOG();
+  const { url } = results;
+
+  return (
+    <Section>
+      <p>
+        Showing results for <a href={url}>{url}</a>.
+      </p>
+      <p>
+        We found <em>11 html tags</em>, <em>2 open graph tags</em>, and{" "}
+        <em>4 twitter tags</em>
+      </p>
+    </Section>
+  );
+};
+
+const Tags = () => {
+  const { results } = useOG();
+  const { tags } = results;
 
   const htmlTags = tags.filter(t => t.category === "html");
   const twitterTags = tags.filter(t => t.category === "twitter");
   const ogTags = tags.filter(t => t.category === "opengraph");
 
   return (
-    <StyledTagsDisplay>
+    <Section>
       <TagTable title="HTML" nameProp="Name" tags={htmlTags} />
       <TagTable title="Twitter" nameProp="Name" tags={twitterTags} />
       <TagTable title="Open Graph" nameProp="Property" tags={ogTags} />
-    </StyledTagsDisplay>
+    </Section>
   );
 };
 
-export default TagsDisplay;
+const Results = () => {
+  return (
+    <StyledResults>
+      <Info />
+      <Tags />
+    </StyledResults>
+  );
+};
+
+export default Results;

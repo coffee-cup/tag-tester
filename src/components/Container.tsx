@@ -5,6 +5,7 @@ const Container = styled.div(
   css({
     maxWidth: "container",
     mx: "auto",
+    px: [2, 3, 4],
   }),
 );
 

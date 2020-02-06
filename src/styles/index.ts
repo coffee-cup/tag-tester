@@ -27,7 +27,7 @@ const theme: Theme = {
   colors: {
     text: "#333",
     background: "white",
-    primary: "#835c86",
+    primary: "#7a557d",
     secondary: "#d98072",
     muted: "#eff0f6",
     border: "#b0b0b0",
@@ -89,14 +89,18 @@ const theme: Theme = {
         ...heading,
         fontSize: 0,
       },
-    },
-    a: {
-      color: "text",
-      textDecoration: "underline",
-      transition: "opacity 250ms ease-in-out",
+      em: {
+        fontStyle: "normal",
+        fontWeight: "bold",
+      },
+      a: {
+        color: "text",
+        textDecoration: "underline",
+        transition: "color 250ms ease-in-out",
 
-      "&:hover": {
-        opacity: 0.6,
+        "&:hover": {
+          color: "secondary",
+        },
       },
     },
     buttons: {

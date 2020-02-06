@@ -1,6 +1,6 @@
 import * as React from "react";
 import { validUrl } from "./utils";
-import { MetaTag } from "./types";
+import { Results } from "./types";
 
 export interface OGState {
   url: string;
@@ -8,7 +8,7 @@ export interface OGState {
   error: string;
   setUrl: (value: string) => void;
   fetchTags: () => void;
-  tags: MetaTag[] | null;
+  results: Results | null;
 }
 
 const OGContext = React.createContext<OGState>({} as OGState);
@@ -23,7 +23,7 @@ export const OGProvider: React.FC = props => {
   const [error, setError] = React.useState<string | null>(null);
   const [isUrlError, setIsUrlError] = React.useState(false);
 
-  const [tags, setTags] = React.useState<MetaTag[] | null>(null);
+  const [results, setResults] = React.useState<Results | null>(null);
 
   const fetchTags = async () => {
     if (isUrlError || url === "") {
@@ -36,13 +36,13 @@ export const OGProvider: React.FC = props => {
     if (json.error != null) {
       setError(json.error);
     } else {
-      setTags(json.tags);
+      setResults(json);
       setError(null);
     }
   };
 
   React.useEffect(() => {
-    if (tags == null) {
+    if (results == null) {
       fetchTags();
     }
   }, []);
@@ -56,7 +56,7 @@ export const OGProvider: React.FC = props => {
       setIsUrlError(value !== "" && !validUrl(value));
     },
     fetchTags,
-    tags,
+    results,
   };
 
   return (
