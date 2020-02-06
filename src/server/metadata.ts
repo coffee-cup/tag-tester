@@ -1,30 +1,30 @@
 import * as htmlparser2 from "htmlparser2";
-import { MetaTag, MetaCategory } from "../types";
-import { htmlTags, twitterTags, isImportantTag } from "../tags";
+import { MetaTag } from "../types";
 
 export const getMetadata = (html: string): MetaTag[] => {
   const tags: MetaTag[] = [];
+
+  let readingTitle = false;
 
   const htmlParser = new htmlparser2.Parser({
     onopentag(name, attribs) {
       if (name === "meta") {
         const { name, property, content } = attribs;
 
-        if (isImportantTag(name, property)) {
-          let category: MetaCategory = htmlTags.includes(name ?? property)
-            ? "html"
-            : twitterTags.includes(name ?? property)
-            ? "twitter"
-            : "opengraph";
-
-          tags.push({
-            name,
-            property,
-            category,
-            content,
-          });
+        if (name || property) {
+          tags.push({ name, property, content });
         }
+      } else if (name === "title") {
+        readingTitle = true;
       }
+    },
+    ontext(text) {
+      if (readingTitle) {
+        tags.push({ name: "title", content: text });
+      }
+    },
+    onclosetag() {
+      readingTitle = false;
     },
   });
 
