@@ -27,9 +27,10 @@ const theme: Theme = {
   colors: {
     text: "#333",
     background: "white",
-    primary: "#3924ff",
-    secondary: "text",
+    primary: "#835c86",
+    secondary: "#d98072",
     muted: "#eff0f6",
+    border: "#b0b0b0",
     grey: "#a2a2a2",
     error: "red",
   },
@@ -47,7 +48,7 @@ const theme: Theme = {
   },
   fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 96],
   sizes: {
-    container: "48em",
+    container: "60em",
     measure: "32em",
     header: "4rem",
   },
@@ -133,13 +134,18 @@ const theme: Theme = {
       borderCollapse: "separate",
       borderSpacing: 0,
     },
+    tr: {},
     th: {
       textAlign: "left",
-      borderBottomStyle: "solid",
+      pb: 1,
+      pl: 2,
     },
     td: {
       textAlign: "left",
-      borderBottomStyle: "solid",
+      borderStyle: "solid",
+      borderWidth: "1px",
+      borderColor: "border",
+      p: 2,
     },
     blockquote: {
       mt: 0,

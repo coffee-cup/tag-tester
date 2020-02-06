@@ -19,14 +19,14 @@ export const useOG = (): OGState => {
 };
 
 export const OGProvider: React.FC = props => {
-  const [url, setUrl] = React.useState("https://jakerunzer.com");
+  const [url, setUrl] = React.useState("https://alfie.prodo.ai");
   const [error, setError] = React.useState<string | null>(null);
   const [isUrlError, setIsUrlError] = React.useState(false);
 
   const [tags, setTags] = React.useState<MetaTag[] | null>(null);
 
   const fetchTags = async () => {
-    if (isUrlError) {
+    if (isUrlError || url === "") {
       return;
     }
 
@@ -40,6 +40,12 @@ export const OGProvider: React.FC = props => {
       setError(null);
     }
   };
+
+  React.useEffect(() => {
+    if (tags == null) {
+      fetchTags();
+    }
+  }, []);
 
   const value: OGState = {
     url,

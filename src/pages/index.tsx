@@ -2,8 +2,9 @@ import * as React from "react";
 import styled from "@emotion/styled";
 import css from "@styled-system/css";
 import { withLayout } from "../components/Layout";
-import UrlForm from "../components/UrlForm";
 import TagsDisplay from "../components/TagsDisplay";
+import Header from "../components/Header";
+import Container from "../components/Container";
 import { useOG } from "../context";
 
 const StyledHome = styled.div(css({}));
@@ -13,12 +14,12 @@ const Home = () => {
 
   return (
     <StyledHome>
-      <h1>Open Graph Tester</h1>
+      <Header />
 
-      <UrlForm />
-
-      {tags != null && <TagsDisplay />}
-      {error != null && error}
+      <Container>
+        {tags != null && <TagsDisplay />}
+        {error != null && error}
+      </Container>
     </StyledHome>
   );
 };

@@ -13,6 +13,7 @@ const StyledUrlForm = styled.form(
       flexGrow: 1,
       borderTopRightRadius: 0,
       borderBottomRightRadius: 0,
+      borderRight: 0,
     },
 
     button: {

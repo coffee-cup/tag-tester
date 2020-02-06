@@ -9,9 +9,7 @@ const Content = styled(Styled.root)(
   css({
     color: "text",
     backgroundColor: "background",
-    maxWidth: "container",
     mx: "auto",
-    px: [3, 4],
   }),
 );
 
