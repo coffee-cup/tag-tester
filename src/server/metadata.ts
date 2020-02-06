@@ -9,10 +9,10 @@ export const getMetadata = (html: string): MetaTag[] => {
   const htmlParser = new htmlparser2.Parser({
     onopentag(name, attribs) {
       if (name === "meta") {
-        const { name, property, content } = attribs;
+        const { name, property, content, value } = attribs;
 
         if (name || property) {
-          tags.push({ name, property, content });
+          tags.push({ name, property, content, value });
         }
       } else if (name === "title") {
         readingTitle = true;

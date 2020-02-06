@@ -5,6 +5,7 @@ import { useOG } from "../context";
 import { Styled } from "theme-ui";
 import { MetaTag } from "../types";
 import Section from "./Section";
+import { isTwitterTag, isOGTag } from "../tags";
 
 const StyledResults = styled.div(
   css({
@@ -15,7 +16,9 @@ const StyledResults = styled.div(
 
 const Table = styled(Styled.table)(
   css({
-    maxWidth: "100%",
+    width: "100%",
+    maxWidth: "container",
+    overflow: "hidden",
     borderCollapse: "collapse",
     borderSpacing: 0,
     p: 0,
@@ -66,10 +69,10 @@ const TagTable: React.FC<{
           <Row key={i}>
             <TagName>{tag.name ?? tag.property}</TagName>
             <TagValue>
-              {tag.content}
+              {tag.content ?? tag.value}
 
               {(tag.name ?? tag.property) === "og:image" && (
-                <TableImage alt="" src={tag.content} />
+                <TableImage alt="" src={tag.content ?? tag.value} />
               )}
             </TagValue>
           </Row>
@@ -81,16 +84,24 @@ const TagTable: React.FC<{
 
 const Info = () => {
   const { results } = useOG();
-  const { url } = results;
+  const { url, tags } = results;
+
+  const numTwitter = tags.filter(t => isTwitterTag(t)).length;
+  const numOG = tags.filter(t => isOGTag(t)).length;
+  const numHtml = tags.length - numTwitter - numOG;
 
   return (
     <Section>
       <p>
-        Showing results for <a href={url}>{url}</a>.
+        Showing results for{" "}
+        <a href={url} target="_blank" rel="noopener">
+          {url}
+        </a>
+        .
       </p>
       <p>
-        We found <em>11 html tags</em>, <em>2 open graph tags</em>, and{" "}
-        <em>4 twitter tags</em>
+        Found <em>{numHtml} html</em> tags, <em>{numOG} open graph</em> tags,
+        and <em>{numTwitter} twitter</em> tags
       </p>
     </Section>
   );

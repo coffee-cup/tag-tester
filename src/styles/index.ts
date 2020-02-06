@@ -50,7 +50,6 @@ const theme: Theme = {
   sizes: {
     container: "60em",
     measure: "32em",
-    header: "4rem",
   },
   lineHeights: {
     body: 1.5,

@@ -19,7 +19,7 @@ export const useOG = (): OGState => {
 };
 
 export const OGProvider: React.FC = props => {
-  const [url, setUrl] = React.useState("https://alfie.prodo.ai");
+  const [url, setUrl] = React.useState("https://alfie.prodo.ai/plucky-cabbage");
   const [error, setError] = React.useState<string | null>(null);
   const [isUrlError, setIsUrlError] = React.useState(false);
 
@@ -29,6 +29,8 @@ export const OGProvider: React.FC = props => {
     if (isUrlError || url === "") {
       return;
     }
+
+    setResults(null);
 
     const query = `page=${encodeURIComponent(url)}`;
     const json = await fetch(`/api/html?${query}`).then(res => res.json());
