@@ -29,7 +29,7 @@ const SubTitle = styled.p(
 const Header: React.FC = () => (
   <StyledHeader>
     <Container>
-      <Title>Open Graph Tester</Title>
+      <Title>Tag Tester</Title>
       <SubTitle>
         Test your websites html, open graph and twitter metadata tags.
       </SubTitle>

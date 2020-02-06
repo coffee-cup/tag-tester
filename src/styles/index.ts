@@ -58,13 +58,13 @@ const theme: Theme = {
   },
   styles: {
     ...system.styles,
-    body: {
-      fontFamily: "monospace",
-    },
     root: {
       fontFamily: "body",
       lineHeight: "body",
       fontWeight: "body",
+      p: {
+        fontSize: 2,
+      },
       h1: {
         ...heading,
         fontSize: [6, 7],

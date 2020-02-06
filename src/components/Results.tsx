@@ -18,21 +18,28 @@ const Table = styled(Styled.table)(
     maxWidth: "100%",
     borderCollapse: "collapse",
     borderSpacing: 0,
+    p: 0,
   }),
 );
 
-const Row = styled(Styled.tr)(css({}));
-
-const Header = styled(Styled.th)(css({}));
-
-const Cell = styled(Styled.td)(css({}));
-
-const TableTitle = styled.h3(
+const Row = styled(Styled.tr)(
   css({
-    bg: "secondary",
-    mt: 0,
-    mb: 2,
-    p: 2,
+    "&:nth-child(even) td": {
+      bg: "muted",
+    },
+  }),
+);
+
+const TagName = styled(Styled.td)(
+  css({
+    border: "solid 2px transparent",
+    fontWeight: "bold",
+  }),
+);
+
+const TagValue = styled(Styled.td)(
+  css({
+    border: "solid 2px transparent",
   }),
 );
 
@@ -50,32 +57,21 @@ const StyledTagTable = styled.div(
 );
 
 const TagTable: React.FC<{
-  title: string;
-  nameProp: string;
   tags: MetaTag[];
-}> = ({ title, nameProp, tags }) => (
+}> = ({ tags }) => (
   <StyledTagTable>
-    <TableTitle>{title}</TableTitle>
-
     <Table>
-      <thead>
-        <Row>
-          <Header>{nameProp}</Header>
-          <Header>Content</Header>
-        </Row>
-      </thead>
-
       <tbody>
         {tags.map((tag, i) => (
           <Row key={i}>
-            <Cell>{tag[nameProp.toLowerCase()]}</Cell>
-            <Cell>
+            <TagName>{tag.name ?? tag.property}</TagName>
+            <TagValue>
               {tag.content}
 
-              {tag[nameProp.toLowerCase()] === "og:image" && (
+              {(tag.name ?? tag.property) === "og:image" && (
                 <TableImage alt="" src={tag.content} />
               )}
-            </Cell>
+            </TagValue>
           </Row>
         ))}
       </tbody>
@@ -104,15 +100,9 @@ const Tags = () => {
   const { results } = useOG();
   const { tags } = results;
 
-  const htmlTags = tags.filter(t => t.category === "html");
-  const twitterTags = tags.filter(t => t.category === "twitter");
-  const ogTags = tags.filter(t => t.category === "opengraph");
-
   return (
     <Section>
-      <TagTable title="HTML" nameProp="Name" tags={htmlTags} />
-      <TagTable title="Twitter" nameProp="Name" tags={twitterTags} />
-      <TagTable title="Open Graph" nameProp="Property" tags={ogTags} />
+      <TagTable tags={tags} />
     </Section>
   );
 };

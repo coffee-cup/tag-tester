@@ -10,6 +10,7 @@ const Content = styled(Styled.root)(
     color: "text",
     backgroundColor: "background",
     mx: "auto",
+    fontSize: 2,
   }),
 );
 
