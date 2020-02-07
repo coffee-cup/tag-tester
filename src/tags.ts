@@ -37,3 +37,9 @@ export const isImageTag = (tag: MetaTag): boolean => {
   const name = tag.name ?? tag.property;
   return imageRegex.test(name);
 };
+
+export const getNameProp = (tag: MetaTag): string =>
+  tag.name != null ? "name" : "property";
+
+export const getValueProp = (tag: MetaTag): string =>
+  tag.content != null ? "content" : "value";

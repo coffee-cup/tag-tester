@@ -5,6 +5,8 @@ import { useOG } from "../context";
 import Section from "./Section";
 import { isTwitterTag, isOGTag, isImageTag } from "../tags";
 import { MetaTag } from "../types";
+import { Edit2, Check } from "react-feather";
+import Input from "./Input";
 
 const StyledResults = styled.div(
   css({
@@ -31,14 +33,45 @@ const TagName = styled.div(
   }),
 );
 
-const TagValue = styled.div(css({}));
+const TagValue = styled.div(
+  css({
+    position: "relative",
+  }),
+);
 
 const StyledTagRow = styled.div<{ highlight: boolean }>(props =>
   css({
     display: "grid",
+    alignItems: "center",
     gridTemplateColumns: "140px 1fr",
     bg: props.highlight ? "transparent" : "muted",
     p: 2,
+  }),
+);
+
+const IconContainer = styled.div<{ show: boolean }>(props =>
+  css({
+    position: "absolute",
+    display: "flex",
+    alignItems: "center",
+    top: 0,
+    right: 2,
+    height: "100%",
+    color: "grey",
+    cursor: "pointer",
+    opacity: props.show ? "1" : "0",
+
+    transition: "opacity 250ms ease-in-out",
+  }),
+);
+
+const TagInput = styled(Input)(
+  css({
+    width: "100%",
+    py: 2,
+    pr: 4,
+    border: "solid 1px",
+    borderColor: "secondary",
   }),
 );
 
@@ -46,19 +79,69 @@ const TagRow: React.FC<{ tag: MetaTag; highlight: boolean }> = ({
   tag,
   highlight,
 }) => {
-  const isImage = isImageTag(tag);
+  const { editTag } = useOG();
+
+  const [showEdit, setShowEdit] = React.useState(false);
+  const [isEditing, setIsEditing] = React.useState(false);
+  const [editedValue, setEditedValue] = React.useState(
+    tag.content ?? tag.value,
+  );
+
+  React.useEffect(() => {
+    setEditedValue(tag.content ?? tag.value);
+  }, [tag.content, tag.value]);
+
+  const showImage = isImageTag(tag) && !isEditing;
+
+  const finishEditing = () => {
+    editTag(tag, editedValue);
+    setIsEditing(false);
+  };
+
+  const iconClick = () => {
+    if (isEditing) {
+      finishEditing();
+    } else {
+      setIsEditing(true);
+    }
+  };
 
   return (
-    <StyledTagRow highlight={highlight}>
-      <TagName>{tag.name ?? tag.property}</TagName>
-      <TagValue>
-        {!isImage
-          ? tag.content ?? tag.value
-          : (tag.name ?? tag.property) === "og:image" && (
-              <a href={tag.content ?? tag.value}>
-                <TableImage alt="" src={tag.content ?? tag.value} />
-              </a>
-            )}
+    <StyledTagRow
+      className="tag-row"
+      highlight={highlight}
+      onMouseEnter={() => setShowEdit(true)}
+      onMouseLeave={() => setShowEdit(false)}
+    >
+      <TagName className="tag-name">{tag.name ?? tag.property}</TagName>
+      <TagValue className="tag-value">
+        <IconContainer show={showEdit} onClick={() => iconClick()}>
+          {isEditing ? <Check size="16px" /> : <Edit2 size="14px" />}
+        </IconContainer>
+
+        {isEditing ? (
+          <form
+            onSubmit={e => {
+              e.preventDefault();
+              finishEditing();
+            }}
+          >
+            <TagInput
+              value={editedValue}
+              onChange={e => setEditedValue(e.target.value)}
+            />
+          </form>
+        ) : (
+          <>
+            {!showImage
+              ? tag.content ?? tag.value
+              : (tag.name ?? tag.property) === "og:image" && (
+                  <a href={tag.content ?? tag.value}>
+                    <TableImage alt="" src={tag.content ?? tag.value} />
+                  </a>
+                )}
+          </>
+        )}
       </TagValue>
     </StyledTagRow>
   );

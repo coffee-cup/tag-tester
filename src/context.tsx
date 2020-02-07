@@ -1,14 +1,16 @@
 import * as React from "react";
 import { validUrl } from "./utils";
-import { Results } from "./types";
+import { Results, MetaTag } from "./types";
+import { getValueProp } from "./tags";
 
 export interface OGState {
   url: string;
   isUrlError: boolean;
   error: string;
+  results: Results | null;
   setUrl: (value: string) => void;
   fetchTags: () => void;
-  results: Results | null;
+  editTag: (tag: MetaTag, value: string) => void;
 }
 
 const OGContext = React.createContext<OGState>({} as OGState);
@@ -43,6 +45,24 @@ export const OGProvider: React.FC = props => {
     }
   };
 
+  const editTag = (tag: MetaTag, value: string) => {
+    const newTags = results.tags.map(t => {
+      if (t != tag) {
+        return t;
+      }
+
+      return {
+        ...t,
+        [getValueProp(t)]: value,
+      };
+    });
+
+    setResults({
+      ...results,
+      tags: newTags,
+    });
+  };
+
   React.useEffect(() => {
     if (results == null) {
       fetchTags();
@@ -53,12 +73,13 @@ export const OGProvider: React.FC = props => {
     url,
     isUrlError,
     error,
+    results,
     setUrl: value => {
       setUrl(value);
       setIsUrlError(value !== "" && !validUrl(value));
     },
     fetchTags,
-    results,
+    editTag,
   };
 
   return (
