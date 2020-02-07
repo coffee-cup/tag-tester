@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import fetch from "node-fetch";
 import { getMetadata } from "../../server/metadata";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -10,8 +9,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const html = await fetch(page as string).then(res => res.text());
-    const tags = getMetadata(html);
+    const tags = await getMetadata(page as string);
 
     res.status(200).json({ url: page, tags });
   } catch (e) {

@@ -1,7 +1,10 @@
 import * as htmlparser2 from "htmlparser2";
 import { MetaTag } from "../types";
+import fetch from "node-fetch";
 
-export const getMetadata = (html: string): MetaTag[] => {
+export const getMetadata = async (page: string): Promise<MetaTag[]> => {
+  const html = await fetch(page as string).then(res => res.text());
+
   const tags: MetaTag[] = [];
 
   let readingTitle = false;
