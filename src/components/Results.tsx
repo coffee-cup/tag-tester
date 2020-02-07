@@ -2,85 +2,82 @@ import * as React from "react";
 import styled from "@emotion/styled";
 import css from "@styled-system/css";
 import { useOG } from "../context";
-import { Styled } from "theme-ui";
-import { MetaTag } from "../types";
 import Section from "./Section";
-import { isTwitterTag, isOGTag } from "../tags";
+import { isTwitterTag, isOGTag, isImageTag } from "../tags";
+import { MetaTag } from "../types";
 
 const StyledResults = styled.div(
   css({
-    whiteSpace: "pre",
     my: 2,
-  }),
-);
-
-const Table = styled(Styled.table)(
-  css({
-    width: "100%",
-    maxWidth: "container",
-    overflow: "hidden",
-    borderCollapse: "collapse",
-    borderSpacing: 0,
-    p: 0,
-  }),
-);
-
-const Row = styled(Styled.tr)(
-  css({
-    "&:nth-child(even) td": {
-      bg: "muted",
-    },
-  }),
-);
-
-const TagName = styled(Styled.td)(
-  css({
-    border: "solid 2px transparent",
-    fontWeight: "bold",
-  }),
-);
-
-const TagValue = styled(Styled.td)(
-  css({
-    border: "solid 2px transparent",
   }),
 );
 
 const TableImage = styled.img(
   css({
     display: "block",
-    maxWidth: "20rem",
+    maxWidth: "100%",
   }),
 );
 
-const StyledTagTable = styled.div(
+const StyledTags = styled.div(
   css({
     pb: 4,
   }),
 );
 
-const TagTable: React.FC<{
-  tags: MetaTag[];
-}> = ({ tags }) => (
-  <StyledTagTable>
-    <Table>
-      <tbody>
-        {tags.map((tag, i) => (
-          <Row key={i}>
-            <TagName>{tag.name ?? tag.property}</TagName>
-            <TagValue>
-              {tag.content ?? tag.value}
-
-              {(tag.name ?? tag.property) === "og:image" && (
-                <TableImage alt="" src={tag.content ?? tag.value} />
-              )}
-            </TagValue>
-          </Row>
-        ))}
-      </tbody>
-    </Table>
-  </StyledTagTable>
+const TagName = styled.div(
+  css({
+    fontWeight: "bold",
+  }),
 );
+
+const TagValue = styled.div(css({}));
+
+const StyledTagRow = styled.div<{ highlight: boolean }>(props =>
+  css({
+    display: "grid",
+    gridTemplateColumns: "140px 1fr",
+    bg: props.highlight ? "transparent" : "muted",
+    p: 2,
+  }),
+);
+
+const TagRow: React.FC<{ tag: MetaTag; highlight: boolean }> = ({
+  tag,
+  highlight,
+}) => {
+  const isImage = isImageTag(tag);
+
+  return (
+    <StyledTagRow highlight={highlight}>
+      <TagName>{tag.name ?? tag.property}</TagName>
+      <TagValue>
+        {!isImage
+          ? tag.content ?? tag.value
+          : (tag.name ?? tag.property) === "og:image" && (
+              <a href={tag.content ?? tag.value}>
+                <TableImage alt="" src={tag.content ?? tag.value} />
+              </a>
+            )}
+      </TagValue>
+    </StyledTagRow>
+  );
+};
+
+const Tags = () => {
+  const { results } = useOG();
+  const { tags } = results;
+
+  return (
+    <Section>
+      <StyledTags>
+        {tags.map((tag, i) => (
+          <TagRow key={i} tag={tag} highlight={i % 2 === 0} />
+        ))}
+      </StyledTags>
+    </Section>
+  );
+};
 
 const Info = () => {
   const { results } = useOG();
@@ -103,17 +100,6 @@ const Info = () => {
         Found <em>{numHtml} html</em> tags, <em>{numOG} open graph</em> tags,
         and <em>{numTwitter} twitter</em> tags
       </p>
-    </Section>
-  );
-};
-
-const Tags = () => {
-  const { results } = useOG();
-  const { tags } = results;
-
-  return (
-    <Section>
-      <TagTable tags={tags} />
     </Section>
   );
 };

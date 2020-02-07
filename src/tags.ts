@@ -31,3 +31,9 @@ export const isOGTag = (tag: MetaTag): boolean => {
   const name = tag.name ?? tag.property;
   return name != null && name.startsWith(ogPrefix);
 };
+
+const imageRegex = /^.*:?image$/;
+export const isImageTag = (tag: MetaTag): boolean => {
+  const name = tag.name ?? tag.property;
+  return imageRegex.test(name);
+};
