@@ -1,13 +1,14 @@
 import * as React from "react";
 import { validUrl } from "./utils";
 import { Results, MetaTag } from "./types";
-import { getValueProp } from "./tags";
+import { getValueProp, createCustomUrl } from "./tags";
 
 export interface OGState {
   url: string;
   isUrlError: boolean;
   error: string;
   results: Results | null;
+  customUrl: string | null;
   setUrl: (value: string) => void;
   fetchTags: () => void;
   editTag: (tag: MetaTag, value: string) => void;
@@ -24,8 +25,8 @@ export const OGProvider: React.FC = props => {
   const [url, setUrl] = React.useState("https://alfie.prodo.ai/plucky-cabbage");
   const [error, setError] = React.useState<string | null>(null);
   const [isUrlError, setIsUrlError] = React.useState(false);
-
   const [results, setResults] = React.useState<Results | null>(null);
+  const [customUrl, setCustomUrl] = React.useState<string | null>(null);
 
   const fetchTags = async () => {
     if (isUrlError || url === "") {
@@ -61,6 +62,8 @@ export const OGProvider: React.FC = props => {
       ...results,
       tags: newTags,
     });
+
+    setCustomUrl(createCustomUrl(results.url, newTags));
   };
 
   React.useEffect(() => {
@@ -74,6 +77,7 @@ export const OGProvider: React.FC = props => {
     isUrlError,
     error,
     results,
+    customUrl,
     setUrl: value => {
       setUrl(value);
       setIsUrlError(value !== "" && !validUrl(value));

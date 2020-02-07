@@ -43,3 +43,19 @@ export const getNameProp = (tag: MetaTag): string =>
 
 export const getValueProp = (tag: MetaTag): string =>
   tag.content != null ? "content" : "value";
+
+export const createCustomUrl = (url: string, tags: MetaTag[]): string => {
+  const query = {
+    url,
+  };
+
+  for (const t of tags) {
+    query[t.name ?? t.property] = t.content ?? t.value;
+  }
+
+  const queryString = Object.keys(query)
+    .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(query[k])}`)
+    .join("&");
+
+  return `http://localhost:3000/api/page?${queryString}`;
+};
