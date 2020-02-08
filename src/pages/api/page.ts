@@ -46,11 +46,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(400).json({ error: e.message });
   }
 
-  console.log(tags);
-
   const page = generatePage(tags);
 
   res.setHeader("Content-Type", "text/html");
-
   res.status(200).send(page);
 };
