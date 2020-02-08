@@ -11,14 +11,15 @@ import CustomUrl from "../components/CustomUrl";
 const StyledHome = styled.div(css({}));
 
 const Home = () => {
-  const { results, error, customUrl } = useOG();
+  const { results, error } = useOG();
 
   return (
     <StyledHome>
       <Header />
 
+      <CustomUrl />
+
       <Container>
-        {customUrl != null && <CustomUrl />}
         {results != null && <Results />}
         {error != null && error}
       </Container>

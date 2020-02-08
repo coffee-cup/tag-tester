@@ -9,7 +9,7 @@ const StyledHeader = styled.header(
     background: props =>
       `linear-gradient(to bottom right, ${props.colors.primary}, ${props.colors.secondary})`,
     color: "white",
-    mb: 3,
+    pb: 3,
     py: 6,
   }),
 );

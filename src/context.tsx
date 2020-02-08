@@ -28,12 +28,16 @@ export const OGProvider: React.FC = props => {
   const [results, setResults] = React.useState<Results | null>(null);
   const [customUrl, setCustomUrl] = React.useState<string | null>(null);
 
+  const editedTagsRef = React.useRef(new Map<string, string>());
+
   const fetchTags = async () => {
     if (isUrlError || url === "") {
       return;
     }
 
     setResults(null);
+    setCustomUrl(null);
+    editedTagsRef.current.clear();
 
     const query = `page=${encodeURIComponent(url)}`;
     const json = await fetch(`/api/html?${query}`).then(res => res.json());
@@ -63,7 +67,8 @@ export const OGProvider: React.FC = props => {
       tags: newTags,
     });
 
-    setCustomUrl(createCustomUrl(results.url, newTags));
+    editedTagsRef.current.set(tag.name ?? tag.property, value);
+    setCustomUrl(createCustomUrl(results.url, editedTagsRef.current));
   };
 
   React.useEffect(() => {

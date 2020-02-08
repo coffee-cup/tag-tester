@@ -112,6 +112,11 @@ const TagRow: React.FC<{ tag: MetaTag; highlight: boolean }> = ({
       highlight={highlight}
       onMouseEnter={() => setShowEdit(true)}
       onMouseLeave={() => setShowEdit(false)}
+      onClick={() => {
+        if (!isEditing) {
+          setIsEditing(true);
+        }
+      }}
     >
       <TagName className="tag-name">{tag.name ?? tag.property}</TagName>
       <TagValue className="tag-value">
@@ -162,7 +167,7 @@ const Tags = () => {
   );
 };
 
-const Info = () => {
+export const Info = () => {
   const { results } = useOG();
   const { url, tags } = results;
 
@@ -190,7 +195,6 @@ const Info = () => {
 const Results = () => {
   return (
     <StyledResults>
-      <Info />
       <Tags />
     </StyledResults>
   );

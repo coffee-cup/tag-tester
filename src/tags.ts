@@ -44,13 +44,16 @@ export const getNameProp = (tag: MetaTag): string =>
 export const getValueProp = (tag: MetaTag): string =>
   tag.content != null ? "content" : "value";
 
-export const createCustomUrl = (url: string, tags: MetaTag[]): string => {
+export const createCustomUrl = (
+  url: string,
+  customTags: Map<string, string>,
+): string => {
   const query = {
     url,
   };
 
-  for (const t of tags) {
-    query[t.name ?? t.property] = t.content ?? t.value;
+  for (const [name, value] of Array.from(customTags.entries())) {
+    query[name] = value;
   }
 
   const queryString = Object.keys(query)
