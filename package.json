@@ -13,6 +13,7 @@
     "@styled-system/css": "^5.1.4",
     "@theme-ui/presets": "^0.3.0",
     "htmlparser2": "^4.0.0",
+    "next-seo": "^4.1.0",
     "node-fetch": "^2.6.0",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
@@ -21,6 +22,7 @@
   },
   "devDependencies": {
     "@types/htmlparser2": "^3.10.1",
+    "@types/next-seo": "^1.10.0",
     "@types/node": "^13.7.0",
     "@types/node-fetch": "^2.5.4",
     "@types/react": "^16.9.19",

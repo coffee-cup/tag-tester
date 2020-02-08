@@ -4,6 +4,7 @@ import theme from "../styles";
 import styled from "@emotion/styled";
 import css from "@styled-system/css";
 import { OGProvider } from "../context";
+import SEO from "./SEO";
 
 const Content = styled(Styled.root)(
   css({
@@ -17,6 +18,7 @@ const Content = styled(Styled.root)(
 const Layout: React.FC = props => (
   <ThemeProvider theme={theme}>
     <OGProvider>
+      <SEO />
       <Content>{props.children}</Content>
     </OGProvider>
   </ThemeProvider>
