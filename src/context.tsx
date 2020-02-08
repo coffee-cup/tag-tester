@@ -68,7 +68,11 @@ export const OGProvider: React.FC = props => {
     });
 
     editedTagsRef.current.set(tag.name ?? tag.property, value);
-    setCustomUrl(createCustomUrl(results.url, editedTagsRef.current));
+    const { protocol, host } = window.location;
+    const currentUrl = `${protocol}//${host}`;
+    setCustomUrl(
+      createCustomUrl(results.url, editedTagsRef.current, currentUrl),
+    );
   };
 
   React.useEffect(() => {

@@ -47,6 +47,7 @@ export const getValueProp = (tag: MetaTag): string =>
 export const createCustomUrl = (
   url: string,
   customTags: Map<string, string>,
+  currentUrl: string,
 ): string => {
   const query = {
     url,
@@ -60,5 +61,5 @@ export const createCustomUrl = (
     .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(query[k])}`)
     .join("&");
 
-  return `http://localhost:3000/api/page?${queryString}`;
+  return `${currentUrl}/api/page?${queryString}`;
 };
