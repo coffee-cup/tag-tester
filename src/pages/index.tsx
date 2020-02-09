@@ -4,6 +4,7 @@ import css from "@styled-system/css";
 import { withLayout } from "../components/Layout";
 import Results from "../components/Results";
 import Section from "../components/Section";
+import Error from "../components/Error";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useOG } from "../context";
@@ -18,14 +19,14 @@ const Full = styled.div(
 );
 
 const Home = () => {
-  const { results, error } = useOG();
+  const { results } = useOG();
 
   return (
     <StyledHome>
       <Full>
         <Header />
 
-        {error != null && error}
+        <Error />
 
         {results && (
           <Section>
