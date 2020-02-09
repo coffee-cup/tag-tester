@@ -8,7 +8,7 @@ export interface OGState {
   isUrlError: boolean;
   error: string;
   results: Results | null;
-  customUrl: string | null;
+  customUrl: string;
   setUrl: (value: string) => void;
   fetchTags: () => void;
   editTag: (tag: MetaTag, value: string) => void;
@@ -22,11 +22,11 @@ export const useOG = (): OGState => {
 };
 
 export const OGProvider: React.FC = props => {
-  const [url, setUrl] = React.useState("https://alfie.prodo.ai/plucky-cabbage");
+  const [url, setUrl] = React.useState("https://tag-tester.now.sh");
   const [error, setError] = React.useState<string | null>(null);
   const [isUrlError, setIsUrlError] = React.useState(false);
   const [results, setResults] = React.useState<Results | null>(null);
-  const [customUrl, setCustomUrl] = React.useState<string | null>(null);
+  const [customUrl, setCustomUrl] = React.useState<string>("");
 
   const editedTagsRef = React.useRef(new Map<string, string>());
 
@@ -48,6 +48,9 @@ export const OGProvider: React.FC = props => {
       setResults(json);
       setError(null);
     }
+
+    const currentUrl = `${window.location.protocol}//${window.location.host}`;
+    setCustomUrl(createCustomUrl(url, editedTagsRef.current, currentUrl));
   };
 
   const editTag = (tag: MetaTag, value: string) => {
@@ -70,6 +73,7 @@ export const OGProvider: React.FC = props => {
     editedTagsRef.current.set(tag.name ?? tag.property, value);
     const { protocol, host } = window.location;
     const currentUrl = `${protocol}//${host}`;
+
     setCustomUrl(
       createCustomUrl(results.url, editedTagsRef.current, currentUrl),
     );

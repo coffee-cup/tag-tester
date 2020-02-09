@@ -3,11 +3,11 @@ import styled from "@emotion/styled";
 import css from "@styled-system/css";
 import { withLayout } from "../components/Layout";
 import Results from "../components/Results";
+import Section from "../components/Section";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import Container from "../components/Container";
 import { useOG } from "../context";
-import CustomUrl from "../components/CustomUrl";
+import Info from "../components/Info";
 
 const StyledHome = styled.div(css({}));
 
@@ -25,12 +25,15 @@ const Home = () => {
       <Full>
         <Header />
 
-        <CustomUrl />
+        {error != null && error}
 
-        <Container>
-          {results != null && <Results />}
-          {error != null && error}
-        </Container>
+        {results && (
+          <Section>
+            <Info />
+
+            <Results />
+          </Section>
+        )}
       </Full>
 
       <Footer />

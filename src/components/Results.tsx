@@ -2,17 +2,13 @@ import * as React from "react";
 import styled from "@emotion/styled";
 import css from "@styled-system/css";
 import { useOG } from "../context";
-import Section from "./Section";
-import { isTwitterTag, isOGTag, isImageTag } from "../tags";
+import Container from "./Container";
+import { isImageTag } from "../tags";
 import { MetaTag } from "../types";
 import { Edit2, Check } from "react-feather";
 import Input from "./Input";
 
-const StyledResults = styled.div(
-  css({
-    my: 2,
-  }),
-);
+const StyledResults = styled.div(css({}));
 
 const TableImage = styled.img(
   css({
@@ -46,6 +42,7 @@ const StyledTagRow = styled.div<{ highlight: boolean }>(props =>
     gridTemplateColumns: "140px 1fr",
     bg: props.highlight ? "transparent" : "muted",
     p: 2,
+    cursor: "pointer",
   }),
 );
 
@@ -157,45 +154,20 @@ const Tags = () => {
   const { tags } = results;
 
   return (
-    <Section>
-      <StyledTags>
-        {tags.map((tag, i) => (
-          <TagRow key={i} tag={tag} highlight={i % 2 === 0} />
-        ))}
-      </StyledTags>
-    </Section>
-  );
-};
-
-export const Info = () => {
-  const { results } = useOG();
-  const { url, tags } = results;
-
-  const numTwitter = tags.filter(t => isTwitterTag(t)).length;
-  const numOG = tags.filter(t => isOGTag(t)).length;
-  const numHtml = tags.length - numTwitter - numOG;
-
-  return (
-    <Section>
-      <p>
-        Showing results for{" "}
-        <a href={url} target="_blank" rel="noopener">
-          {url}
-        </a>
-        .
-      </p>
-      <p>
-        Found <em>{numHtml} html</em> tags, <em>{numOG} open graph</em> tags,
-        and <em>{numTwitter} twitter</em> tags
-      </p>
-    </Section>
+    <StyledTags>
+      {tags.map((tag, i) => (
+        <TagRow key={i} tag={tag} highlight={i % 2 === 0} />
+      ))}
+    </StyledTags>
   );
 };
 
 const Results = () => {
   return (
     <StyledResults>
-      <Tags />
+      <Container>
+        <Tags />
+      </Container>
     </StyledResults>
   );
 };

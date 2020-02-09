@@ -10,13 +10,25 @@ const StyledFooter = styled.footer(
     color: "white",
     pb: 3,
     py: 3,
+
+    a: {
+      color: "white",
+      textDecoration: "none",
+
+      "&:hover": {
+        color: "white",
+        textDecoration: "underline",
+      },
+    },
   }),
 );
 
 const Footer: React.FC = () => (
   <StyledFooter>
     <Container>
-      <p>Made with ♥</p>
+      <p>
+        Made with ♥ by <a href="https://jakerunzer.com">jake runzer</a>
+      </p>
     </Container>
   </StyledFooter>
 );

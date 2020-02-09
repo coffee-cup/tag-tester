@@ -3,7 +3,7 @@ import css from "@styled-system/css";
 
 const Section = styled.div(
   css({
-    py: 2,
+    py: 4,
   }),
 );
 
