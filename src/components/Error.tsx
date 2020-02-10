@@ -14,8 +14,6 @@ const StyledError = styled.div(
 const Error = () => {
   const { error } = useOG();
 
-  console.log(error);
-
   if (error == null) {
     return null;
   }
