@@ -2,13 +2,17 @@ import * as React from "react";
 import styled from "@emotion/styled";
 import css from "@styled-system/css";
 import { useOG } from "../context";
-import Container from "./Container";
 import { isImageTag } from "../tags";
 import { MetaTag } from "../types";
 import { Edit2, Check } from "react-feather";
 import Input from "./Input";
 
-const StyledResults = styled.div(css({}));
+const StyledResults = styled.div(
+  css({
+    px: [0, 0, 4],
+    py: [2, 2, 4],
+  }),
+);
 
 const TableImage = styled.img(
   css({
@@ -68,7 +72,7 @@ const TagInput = styled(Input)(
     py: 2,
     pr: 4,
     border: "solid 1px",
-    borderColor: "secondary",
+    borderColor: "primary",
   }),
 );
 
@@ -83,10 +87,7 @@ const TagRow: React.FC<{ tag: MetaTag; highlight: boolean }> = ({
   const [editedValue, setEditedValue] = React.useState(
     tag.content ?? tag.value,
   );
-
-  React.useEffect(() => {
-    setEditedValue(tag.content ?? tag.value);
-  }, [tag.content, tag.value]);
+  const inputRef = React.useRef<HTMLInputElement>();
 
   const showImage = isImageTag(tag) && !isEditing;
 
@@ -95,11 +96,34 @@ const TagRow: React.FC<{ tag: MetaTag; highlight: boolean }> = ({
     setIsEditing(false);
   };
 
+  const startEditing = () => {
+    setIsEditing(true);
+  };
+
+  React.useEffect(() => {
+    setEditedValue(tag.content ?? tag.value);
+  }, [tag.content, tag.value]);
+
+  React.useEffect(() => {
+    if (inputRef.current != null) {
+      const handler = () => {
+        finishEditing();
+      };
+
+      inputRef.current.addEventListener("blur", handler);
+      return () => {
+        if (inputRef.current != null) {
+          inputRef.current.removeEventListener("blue", handler);
+        }
+      };
+    }
+  }, [inputRef.current]);
+
   const iconClick = () => {
     if (isEditing) {
       finishEditing();
     } else {
-      setIsEditing(true);
+      startEditing();
     }
   };
 
@@ -111,7 +135,7 @@ const TagRow: React.FC<{ tag: MetaTag; highlight: boolean }> = ({
       onMouseLeave={() => setShowEdit(false)}
       onClick={() => {
         if (!isEditing) {
-          setIsEditing(true);
+          startEditing();
         }
       }}
     >
@@ -129,6 +153,8 @@ const TagRow: React.FC<{ tag: MetaTag; highlight: boolean }> = ({
             }}
           >
             <TagInput
+              autoFocus
+              ref={inputRef}
               value={editedValue}
               onChange={e => setEditedValue(e.target.value)}
             />
@@ -151,11 +177,16 @@ const TagRow: React.FC<{ tag: MetaTag; highlight: boolean }> = ({
 
 const Tags = () => {
   const { results } = useOG();
-  const { tags } = results;
+
+  if (results.type !== "success") {
+    return null;
+  }
 
   return (
     <StyledTags>
-      {tags.map((tag, i) => (
+      <h3>Tags</h3>
+
+      {results.tags.map((tag, i) => (
         <TagRow key={i} tag={tag} highlight={i % 2 === 0} />
       ))}
     </StyledTags>
@@ -163,11 +194,15 @@ const Tags = () => {
 };
 
 const Results = () => {
+  const { results } = useOG();
+
+  if (results.type !== "success") {
+    return null;
+  }
+
   return (
     <StyledResults>
-      <Container>
-        <Tags />
-      </Container>
+      <Tags />
     </StyledResults>
   );
 };

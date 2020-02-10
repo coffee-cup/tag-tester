@@ -3,11 +3,10 @@ import styled from "@emotion/styled";
 import css from "@styled-system/css";
 import { withLayout } from "../components/Layout";
 import Results from "../components/Results";
-import Section from "../components/Section";
+import Container from "../components/Container";
 import Error from "../components/Error";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { useOG } from "../context";
 import Info from "../components/Info";
 
 const StyledHome = styled.div(css({}));
@@ -18,23 +17,26 @@ const Full = styled.div(
   }),
 );
 
-const Home = () => {
-  const { results } = useOG();
+const Split = styled.div(
+  css({
+    display: ["block", "block", "grid"],
+    gridTemplateColumns: "1fr 1fr",
+  }),
+);
 
+const Home = () => {
   return (
     <StyledHome>
       <Full>
         <Header />
-
         <Error />
 
-        {results && (
-          <Section>
+        <Container large>
+          <Split>
             <Info />
-
             <Results />
-          </Section>
-        )}
+          </Split>
+        </Container>
       </Full>
 
       <Footer />

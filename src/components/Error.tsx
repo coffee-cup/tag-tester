@@ -12,16 +12,16 @@ const StyledError = styled.div(
 );
 
 const Error = () => {
-  const { error } = useOG();
+  const { results } = useOG();
 
-  if (error == null) {
+  if (results.type !== "error") {
     return null;
   }
 
   return (
     <StyledError>
       <Section>
-        <Container>{error}</Container>
+        <Container>{results.message}</Container>
       </Section>
     </StyledError>
   );

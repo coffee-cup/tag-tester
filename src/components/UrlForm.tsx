@@ -24,7 +24,7 @@ const StyledUrlForm = styled.form(
 );
 
 const UrlForm = () => {
-  const { url, isUrlError, setUrl, fetchTags } = useOG();
+  const { url, isUrlError, fetchTags, setUrl } = useOG();
 
   return (
     <StyledUrlForm

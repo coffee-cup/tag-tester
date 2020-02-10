@@ -47,7 +47,7 @@ export const getValueProp = (tag: MetaTag): string =>
 export const createCustomUrl = (
   url: string,
   customTags: Map<string, string>,
-  currentUrl: string,
+  currentUrl: string = `${window.location.protocol}//${window.location.host}`,
 ): string => {
   const query = {
     url,

@@ -1,60 +1,91 @@
 import * as React from "react";
 import { validUrl } from "./utils";
-import { Results, MetaTag } from "./types";
+import { MetaTag } from "./types";
 import { getValueProp, createCustomUrl } from "./tags";
+import * as api from "./api";
 
-export interface OGState {
+export type Results =
+  | {
+      type: "success";
+      tags: MetaTag[];
+      customUrl: string;
+    }
+  | {
+      type: "loading";
+    }
+  | {
+      type: "error";
+      message: string;
+    };
+
+export interface State {
   url: string;
   isUrlError: boolean;
-  error: string;
-  results: Results | null;
-  customUrl: string;
+  results: Results;
+}
+
+export interface Actions {
   setUrl: (value: string) => void;
   fetchTags: () => void;
   editTag: (tag: MetaTag, value: string) => void;
 }
 
-const OGContext = React.createContext<OGState>({} as OGState);
+const OGContext = React.createContext<State & Actions>({} as State & Actions);
 
-export const useOG = (): OGState => {
+export const useOG = (): State & Actions => {
   const state = React.useContext(OGContext);
   return state;
 };
 
 export const OGProvider: React.FC = props => {
-  const [url, setUrl] = React.useState("https://tag-tester.now.sh");
-  const [error, setError] = React.useState<string | null>(null);
-  const [isUrlError, setIsUrlError] = React.useState(false);
-  const [results, setResults] = React.useState<Results | null>(null);
-  const [customUrl, setCustomUrl] = React.useState<string>("");
+  const [state, setState] = React.useState<State>({
+    url: "https://tag-tester.now.sh",
+    results: { type: "loading" },
+    isUrlError: null,
+  });
 
   const editedTagsRef = React.useRef(new Map<string, string>());
 
   const fetchTags = async () => {
-    if (isUrlError || url === "") {
+    if (state.isUrlError || state.url === "") {
       return;
     }
 
-    setResults(null);
-    setCustomUrl(null);
+    setState({
+      ...state,
+      results: {
+        type: "loading",
+      },
+    });
     editedTagsRef.current.clear();
 
-    const query = `page=${encodeURIComponent(url)}`;
-    const json = await fetch(`/api/html?${query}`).then(res => res.json());
-
-    if (json.error != null) {
-      setError(json.error);
-    } else {
-      setResults(json);
-      setError(null);
+    try {
+      const tagResult = await api.fetchTags(state.url);
+      setState({
+        ...state,
+        results: {
+          type: "success",
+          customUrl: createCustomUrl(state.url, editedTagsRef.current),
+          tags: tagResult.tags,
+        },
+      });
+    } catch (e) {
+      setState({
+        ...state,
+        results: {
+          type: "error",
+          message: e.message ?? "There was an error",
+        },
+      });
     }
-
-    const currentUrl = `${window.location.protocol}//${window.location.host}`;
-    setCustomUrl(createCustomUrl(url, editedTagsRef.current, currentUrl));
   };
 
   const editTag = (tag: MetaTag, value: string) => {
-    const newTags = results.tags.map(t => {
+    if (state.results.type !== "success") {
+      return;
+    }
+
+    const newTags = state.results.tags.map(t => {
       if (t != tag) {
         return t;
       }
@@ -65,38 +96,39 @@ export const OGProvider: React.FC = props => {
       };
     });
 
-    setResults({
-      ...results,
-      tags: newTags,
-    });
-
     editedTagsRef.current.set(tag.name ?? tag.property, value);
-    const { protocol, host } = window.location;
-    const currentUrl = `${protocol}//${host}`;
 
-    setCustomUrl(
-      createCustomUrl(results.url, editedTagsRef.current, currentUrl),
-    );
+    setState({
+      ...state,
+      results: {
+        ...state.results,
+        tags: newTags,
+        customUrl: createCustomUrl(state.url, editedTagsRef.current),
+      },
+    });
   };
 
   React.useEffect(() => {
-    if (results == null) {
+    if (state.results.type !== "success") {
       fetchTags();
     }
   }, []);
 
-  const value: OGState = {
-    url,
-    isUrlError,
-    error,
-    results,
-    customUrl,
+  const actions: Actions = {
     setUrl: value => {
-      setUrl(value);
-      setIsUrlError(value !== "" && !validUrl(value));
+      setState({
+        ...state,
+        url: value,
+        isUrlError: value !== "" && !validUrl(value),
+      });
     },
     fetchTags,
     editTag,
+  };
+
+  const value: State & Actions = {
+    ...state,
+    ...actions,
   };
 
   return (

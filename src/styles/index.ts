@@ -27,8 +27,9 @@ const theme: Theme = {
   colors: {
     text: "#333",
     background: "white",
-    primary: "#7a557d",
-    secondary: "#d98072",
+    primary: "#1fa2ff",
+    secondary: "#a6ffcb",
+    accent: "#12d8fa",
     muted: "#eff0f6",
     border: "#b0b0b0",
     grey: "#a2a2a2",
@@ -49,6 +50,7 @@ const theme: Theme = {
   fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 96],
   sizes: {
     container: "60em",
+    largeContainer: "80em",
     measure: "32em",
   },
   lineHeights: {
@@ -95,10 +97,10 @@ const theme: Theme = {
       a: {
         color: "text",
         textDecoration: "underline",
-        transition: "color 250ms ease-in-out",
+        transition: "all 250ms ease-in-out",
 
         "&:hover": {
-          color: "secondary",
+          bg: "secondary",
         },
       },
     },

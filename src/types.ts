@@ -5,7 +5,7 @@ export interface MetaTag {
   value?: string;
 }
 
-export interface Results {
+export interface TagResult {
   url: string;
   tags: MetaTag[];
 }

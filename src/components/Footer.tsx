@@ -10,6 +10,7 @@ const StyledFooter = styled.footer(
     color: "white",
     pb: 3,
     py: 3,
+    textShadow: "1px 1px 10px #333333a1",
 
     a: {
       color: "white",
