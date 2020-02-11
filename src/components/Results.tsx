@@ -167,13 +167,13 @@ const TagRow: React.FC<{ tag: MetaTag; highlight: boolean }> = ({
           </form>
         ) : (
           <>
-            {!showImage
-              ? tag.content ?? tag.value
-              : (tag.name ?? tag.property) === "og:image" && (
-                  <a href={tag.content ?? tag.value}>
-                    <TableImage alt="" src={tag.content ?? tag.value} />
-                  </a>
-                )}
+            {!showImage ? (
+              tag.content ?? tag.value
+            ) : (
+              <a href={tag.content ?? tag.value}>
+                <TableImage alt="" src={tag.content ?? tag.value} />
+              </a>
+            )}
           </>
         )}
       </TagValue>
