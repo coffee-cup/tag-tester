@@ -2,6 +2,7 @@ import * as React from "react";
 import styled from "@emotion/styled";
 import css from "@styled-system/css";
 import { useOG } from "../context";
+import Link from "next/link";
 
 const StyledInfo = styled.div(
   css({
@@ -100,7 +101,9 @@ export const Info = () => {
           </a>
         </li>
         <li>
-          <a href="/about">What is this site</a>
+          <Link href="/about">
+            <a>What is this site</a>
+          </Link>
         </li>
       </ul>
     </StyledInfo>

@@ -1,28 +1,23 @@
 import * as React from "react";
 import styled from "@emotion/styled";
 import css from "@styled-system/css";
-import { useOG } from "../context";
-import Section from "./Section";
-import Container from "./Container";
 
 const StyledError = styled.div(
   css({
-    py: 4,
+    color: "darkred",
+    p: 2,
   }),
 );
 
-const Error = () => {
-  const { results } = useOG();
+export interface Props {
+  error: string;
+}
 
-  if (results.type !== "error") {
-    return null;
-  }
-
+const Error: React.FC<Props> = ({ error }) => {
   return (
     <StyledError>
-      <Section>
-        <Container>{results.message}</Container>
-      </Section>
+      <h3>Error</h3>
+      {error} D:
     </StyledError>
   );
 };

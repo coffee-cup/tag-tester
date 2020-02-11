@@ -47,8 +47,8 @@ export const getValueProp = (tag: MetaTag): string =>
 export const createCustomUrl = (
   url: string,
   customTags: Map<string, string>,
-  currentUrl: string = `${window.location.protocol}//${window.location.host}`,
 ): string => {
+  const currentUrl = process.env.API_URL ?? "http://localhost:3000";
   const query = {
     url,
   };

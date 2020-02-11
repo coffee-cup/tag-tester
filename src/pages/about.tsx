@@ -5,6 +5,7 @@ import { withLayout } from "../components/Layout";
 import Container from "../components/Container";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import Link from "next/link";
 
 const StyledAbout = styled.div(css({}));
 
@@ -21,6 +22,12 @@ const Home = () => {
         <Container>
           <h1>About Tag Tester</h1>
           <p>TODO</p>
+
+          <p>
+            <Link href="/">
+              <a>Back</a>
+            </Link>
+          </p>
         </Container>
       </Full>
 

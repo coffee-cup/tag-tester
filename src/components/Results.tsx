@@ -1,12 +1,14 @@
 import * as React from "react";
 import styled from "@emotion/styled";
 import css from "@styled-system/css";
+import Link from "next/link";
 import { useOG } from "../context";
 import { isImageTag } from "../tags";
 import { MetaTag } from "../types";
 import { Edit2, Check } from "react-feather";
 import Input from "./Input";
 import Loading from "./Loading";
+import Error from "./Error";
 
 const StyledResults = styled.div(
   css({
@@ -194,16 +196,46 @@ const Tags = () => {
   );
 };
 
+const NotFetched = () => (
+  <div>
+    <h3>No tags fetched yet</h3>
+
+    <p>Enter a url above or try with one of these examples</p>
+
+    <ul>
+      <li>
+        <Link href={`/?url=${encodeURIComponent("https://tagtester.dev")}`}>
+          <a>tagtester.dev</a>
+        </Link>
+      </li>
+      <li>
+        <Link href={`/?url=${encodeURIComponent("https://github.com")}`}>
+          <a>github.com</a>
+        </Link>
+      </li>
+      <li>
+        <Link href={`/?url=${encodeURIComponent("https://zeit.co")}`}>
+          <a>zeit.co</a>
+        </Link>
+      </li>
+    </ul>
+  </div>
+);
+
 const Results = () => {
   const { results } = useOG();
 
-  if (results.type !== "success") {
-    return <Loading />;
-  }
-
   return (
     <StyledResults>
-      <Tags />
+      {results.type === "loading" ? (
+        <Loading />
+      ) : results.type === "not-fetched" ? (
+        <NotFetched />
+      ) : results.type === "error" ? (
+        <Error error={results.message} />
+      ) : (
+        <Tags />
+      )}
     </StyledResults>
   );
 };

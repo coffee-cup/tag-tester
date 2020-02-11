@@ -1,8 +1,9 @@
 import * as React from "react";
 import { validUrl } from "./utils";
-import { MetaTag } from "./types";
+import { MetaTag, TagResult } from "./types";
 import { getValueProp, createCustomUrl } from "./tags";
 import * as api from "./api";
+import Router from "next/router";
 
 export type Results =
   | {
@@ -11,11 +12,14 @@ export type Results =
       customUrl: string;
     }
   | {
+      type: "error";
+      message: string;
+    }
+  | {
       type: "loading";
     }
   | {
-      type: "error";
-      message: string;
+      type: "not-fetched";
     };
 
 export interface State {
@@ -37,22 +41,52 @@ export const useOG = (): State & Actions => {
   return state;
 };
 
-const startingUrl = "https://tagtester.dev";
+const getResults = (
+  tagResult?: TagResult,
+  error?: string,
+  editedTags: Map<string, string> = new Map(),
+): Results => {
+  if (tagResult != null) {
+    return {
+      type: "success",
+      customUrl: createCustomUrl(tagResult.url, editedTags),
+      tags: tagResult.tags,
+    };
+  } else if (error != null) {
+    return {
+      type: "error",
+      message: error,
+    };
+  }
 
-export const OGProvider: React.FC = props => {
-  const [state, setState] = React.useState<State>({
-    url: startingUrl,
-    results: { type: "loading" },
-    isUrlError: null,
+  return {
+    type: "not-fetched",
+  };
+};
+
+export const OGProvider: React.FC<{
+  tagResult?: TagResult;
+  error?: string;
+  url?: string;
+}> = props => {
+  const getState = (): State => ({
+    url: props.tagResult?.url ?? props.url ?? props.error ?? "",
+    results: getResults(props.tagResult, props.error),
+    isUrlError:
+      props.tagResult != null &&
+      props.tagResult.url !== "" &&
+      !validUrl(props.tagResult.url),
   });
+
+  const [state, setState] = React.useState<State>(getState());
+
+  React.useEffect(() => {
+    setState(getState());
+  }, [props.tagResult, props.error]);
 
   const editedTagsRef = React.useRef(new Map<string, string>());
 
   const fetchTags = async () => {
-    if (state.isUrlError || state.url === "") {
-      return;
-    }
-
     setState({
       ...state,
       results: {
@@ -61,23 +95,18 @@ export const OGProvider: React.FC = props => {
     });
     editedTagsRef.current.clear();
 
+    Router.push(`/?url=${encodeURIComponent(state.url)}`);
+
     try {
       const tagResult = await api.fetchTags(state.url);
       setState({
         ...state,
-        results: {
-          type: "success",
-          customUrl: createCustomUrl(state.url, editedTagsRef.current),
-          tags: tagResult.tags,
-        },
+        results: getResults(tagResult, undefined, editedTagsRef.current),
       });
     } catch (e) {
       setState({
         ...state,
-        results: {
-          type: "error",
-          message: e.message ?? "There was an error",
-        },
+        results: getResults(undefined, e.message ?? "There was an error"),
       });
     }
   };
@@ -109,12 +138,6 @@ export const OGProvider: React.FC = props => {
       },
     });
   };
-
-  React.useEffect(() => {
-    if (state.results.type !== "success") {
-      fetchTags();
-    }
-  }, []);
 
   const actions: Actions = {
     setUrl: value => {

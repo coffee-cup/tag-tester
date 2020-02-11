@@ -1,6 +1,7 @@
 import * as React from "react";
 import { ThemeProvider, Styled } from "theme-ui";
 import theme from "../styles";
+import { TagResult } from "../types";
 import styled from "@emotion/styled";
 import css from "@styled-system/css";
 import { OGProvider } from "../context";
@@ -15,17 +16,27 @@ const Content = styled(Styled.root)(
   }),
 );
 
-const Layout: React.FC = props => (
-  <ThemeProvider theme={theme}>
-    <OGProvider>
-      <SEO />
-      <Content>{props.children}</Content>
-    </OGProvider>
-  </ThemeProvider>
-);
+const Layout: React.FC<{
+  tagResult?: TagResult;
+  error?: string;
+  fetchedUrl?: string;
+}> = props => {
+  return (
+    <ThemeProvider theme={theme}>
+      <OGProvider
+        tagResult={props.tagResult}
+        error={props.error}
+        url={props.fetchedUrl}
+      >
+        <SEO />
+        <Content>{props.children}</Content>
+      </OGProvider>
+    </ThemeProvider>
+  );
+};
 
-export const withLayout = (Wrapped: React.ComponentType) => () => (
-  <Layout>
-    <Wrapped />
+export const withLayout = (Wrapped: React.ComponentType) => (props: any) => (
+  <Layout {...props}>
+    <Wrapped {...props} />
   </Layout>
 );

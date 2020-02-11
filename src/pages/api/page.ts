@@ -3,6 +3,7 @@ import { getMetadata } from "../../server/metadata";
 import { generatePage } from "../../server/template";
 import { MetaTag } from "../../types";
 import { ogPrefix, twitterPrefix } from "../../tags";
+import { validUrl } from "../../utils";
 
 const getNameProp = (k: string): string => {
   if (k.startsWith(ogPrefix)) {
@@ -23,31 +24,38 @@ const getValueProp = (k: string): string => {
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { url, ...rest } = req.query;
 
-  const tags: MetaTag[] = [];
-
-  tags.push(
-    ...Object.keys(rest).map(k => ({
-      [getNameProp(k)]: k,
-      [getValueProp(k)]: rest[k],
-    })),
-  );
-
-  const tagNames: Set<string> = new Set(Object.keys(rest));
-
   try {
-    if (url != null && typeof url === "string") {
-      tags.push(
-        ...(await getMetadata(url as string)).filter(
-          t => !tagNames.has(t.name) && !tagNames.has(t.property),
-        ),
-      );
+    if (!validUrl(url)) {
+      throw new Error("Invalid Url");
     }
+
+    const tags: MetaTag[] = [];
+
+    tags.push(
+      ...Object.keys(rest).map(k => ({
+        [getNameProp(k)]: k,
+        [getValueProp(k)]: rest[k],
+      })),
+    );
+
+    const tagNames: Set<string> = new Set(Object.keys(rest));
+
+    tags.push(
+      ...(await getMetadata(url as string)).filter(
+        t => !tagNames.has(t.name) && !tagNames.has(t.property),
+      ),
+    );
+
+    const page = generatePage(tags);
+
+    res.setHeader("Content-Type", "text/html");
+    res.status(200).send(page);
   } catch (e) {
-    res.status(400).json({ error: e.message });
+    res.setHeader("Content-Type", "text/html");
+    res.status(400).send(`
+<h1>${e.message}</h1>
+
+<a href="https://tagtester.dev">Go back to Tag Tester</a>
+`);
   }
-
-  const page = generatePage(tags);
-
-  res.setHeader("Content-Type", "text/html");
-  res.status(200).send(page);
 };
