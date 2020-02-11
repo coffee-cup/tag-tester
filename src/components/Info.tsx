@@ -97,7 +97,11 @@ export const Info = () => {
 
       <ul>
         <li>
-          <a href="https://www.wordstream.com/meta-tags">
+          <a
+            href="https://www.wordstream.com/meta-tags"
+            target="_blank"
+            rel="noopener"
+          >
             What are metadata tags
           </a>
         </li>
