@@ -4,7 +4,7 @@ import * as React from "react";
 import Container from "./Container";
 import UrlForm from "./UrlForm";
 
-const StyledHeader = styled.header(
+const StyledHeader = styled.header<{ small?: boolean }>(props =>
   css({
     background: props =>
       `linear-gradient(to bottom right,
@@ -12,7 +12,7 @@ const StyledHeader = styled.header(
     color: "white",
     textShadow: "1px 1px 10px #3333334f",
     pb: 3,
-    py: 6,
+    py: props.small ? 5 : 6,
   }),
 );
 
@@ -29,15 +29,20 @@ const SubTitle = styled.p(
   }),
 );
 
-const Header: React.FC = () => (
-  <StyledHeader>
+const Header: React.FC<{ small?: boolean }> = props => (
+  <StyledHeader small={props.small}>
     <Container>
-      <Title>Tag Tester</Title>
-      <SubTitle>
-        Test and edit your websites HTML, open graph, and twitter metadata tags
-      </SubTitle>
+      {!props.small && (
+        <>
+          <Title>Tag Tester</Title>
+          <SubTitle>
+            Test and edit your websites HTML, open graph, and twitter metadata
+            tags
+          </SubTitle>
 
-      <UrlForm />
+          <UrlForm />
+        </>
+      )}
     </Container>
   </StyledHeader>
 );
