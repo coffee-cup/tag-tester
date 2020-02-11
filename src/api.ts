@@ -1,10 +1,10 @@
 import { TagResult } from "./types";
+import { rootUrl } from "./utils";
 import fetch from "isomorphic-unfetch";
 
 export const fetchTags = async (path: string): Promise<TagResult> => {
-  const baseUrl = process.env.API_URL ?? "http://localhost:3000";
   const query = `page=${encodeURIComponent(path)}`;
-  const url = `${baseUrl}/api/html?${query}`;
+  const url = `${rootUrl}/api/html?${query}`;
 
   const res = await fetch(url);
   if (res.status !== 200) {

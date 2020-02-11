@@ -15,3 +15,8 @@ export const validUrl = (url: any): boolean => {
   );
   return !!pattern.test(url);
 };
+
+export const rootUrl =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3000"
+    : "https://tagtester.dev";

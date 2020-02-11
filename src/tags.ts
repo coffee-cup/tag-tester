@@ -1,4 +1,5 @@
 import { MetaTag } from "./types";
+import { rootUrl } from "./utils";
 
 export const htmlTags = ["description"];
 
@@ -48,7 +49,6 @@ export const createCustomUrl = (
   url: string,
   customTags: Map<string, string>,
 ): string => {
-  const currentUrl = process.env.API_URL ?? "http://localhost:3000";
   const query = {
     url,
   };
@@ -61,5 +61,5 @@ export const createCustomUrl = (
     .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(query[k])}`)
     .join("&");
 
-  return `${currentUrl}/api/page?${queryString}`;
+  return `${rootUrl}/api/page?${queryString}`;
 };
