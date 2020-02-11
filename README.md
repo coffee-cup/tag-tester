@@ -1,6 +1,6 @@
 # Tag Tester
 
-Find on [tagtester.dev](https://tagtester.dev)
+Find on [tagtester.dev](https://tagtester.dev).
 
 Test your websites html, open graph and twitter metadata tags.
 
