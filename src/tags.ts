@@ -48,7 +48,6 @@ export const createCustomUrl = (
   url: string,
   customTags: Map<string, string>,
 ): string => {
-  console.log("API_URL", process.env.API_URL);
   const currentUrl = process.env.API_URL ?? "http://localhost:3000";
   const query = {
     url,
