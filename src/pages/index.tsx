@@ -1,15 +1,14 @@
-import * as React from "react";
 import styled from "@emotion/styled";
-/* import { useRouter } from "next/router"; */
-import { NextPage } from "next";
 import css from "@styled-system/css";
+import { NextPage } from "next";
+import * as React from "react";
+import * as api from "../api";
+import Container from "../components/Container";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import Info from "../components/Info";
 import { withLayout } from "../components/Layout";
 import Results from "../components/Results";
-import Container from "../components/Container";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import Info from "../components/Info";
-import * as api from "../api";
 
 const StyledHome = styled.div(css({}));
 

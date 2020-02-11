@@ -64,6 +64,16 @@ const getResults = (
   };
 };
 
+const urlRegex = /\?url=(.+)/;
+const parseUrlFromPath = (url: string): string | null => {
+  const match = url.match(urlRegex);
+  if (match == null || match.length !== 2) {
+    return null;
+  }
+
+  return decodeURIComponent(match[1]);
+};
+
 export const OGProvider: React.FC<{
   tagResult?: TagResult;
   error?: string;
@@ -84,9 +94,41 @@ export const OGProvider: React.FC<{
     setState(getState());
   }, [props.tagResult, props.error]);
 
+  React.useEffect(() => {
+    const handleRouteChange = (path: string) => {
+      const url = parseUrlFromPath(path);
+
+      if (url != null) {
+        setState({
+          ...state,
+          url,
+          results: {
+            type: "loading",
+          },
+        });
+      }
+    };
+
+    Router.events.on("routeChangeStart", handleRouteChange);
+    return () => {
+      Router.events.off("routeChangeStart", handleRouteChange);
+    };
+  }, []);
+
   const editedTagsRef = React.useRef(new Map<string, string>());
 
   const fetchTags = async () => {
+    if (state.url == null || state.url === "") {
+      setState({
+        ...state,
+        results: {
+          type: "not-fetched",
+        },
+      });
+
+      return;
+    }
+
     setState({
       ...state,
       results: {
