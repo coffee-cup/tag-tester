@@ -14,22 +14,42 @@ const StyledFooter = styled.footer(
 
     a: {
       color: "white",
-      textDecoration: "none",
 
       "&:hover": {
         color: "white",
-        textDecoration: "underline",
       },
     },
+  }),
+);
+
+const Split = styled.div(
+  css({
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
   }),
 );
 
 const Footer: React.FC = () => (
   <StyledFooter>
     <Container>
-      <p>
-        Made with ♥ by <a href="https://jakerunzer.com">jake runzer</a>
-      </p>
+      <Split>
+        <p>
+          Made with ♥ by{" "}
+          <a href="https://jakerunzer.com" target="_blank" rel="noopener">
+            jake runzer
+          </a>
+        </p>
+        <p>
+          <a
+            href="https://github.com/coffee-cup/tag-tester"
+            target="_blank"
+            rel="noopener"
+          >
+            Source on Github
+          </a>
+        </p>
+      </Split>
     </Container>
   </StyledFooter>
 );
