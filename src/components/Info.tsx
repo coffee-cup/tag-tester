@@ -6,7 +6,8 @@ import Link from "next/link";
 
 const StyledInfo = styled.div(
   css({
-    px: [0, 0, 4],
+    maxWidth: "measure",
+    px: [0, 0, 2],
     pb: [0, 0, 4],
     pt: 4,
   }),
@@ -73,7 +74,7 @@ export const Info = () => {
   const { results } = useOG();
 
   return (
-    <StyledInfo>
+    <StyledInfo className="info">
       <h3>What</h3>
 
       <p>

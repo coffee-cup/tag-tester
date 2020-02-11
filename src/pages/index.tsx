@@ -21,7 +21,7 @@ const Full = styled.div(
 const Split = styled.div(
   css({
     display: ["block", "block", "grid"],
-    gridTemplateColumns: "1fr 1fr",
+    gridTemplateColumns: ["40% 60%"],
   }),
 );
 

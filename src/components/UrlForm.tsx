@@ -8,6 +8,7 @@ import { useOG } from "../context";
 const StyledUrlForm = styled.form(
   css({
     display: "flex",
+    flexWrap: "wrap",
 
     input: {
       flexGrow: 1,
@@ -19,6 +20,7 @@ const StyledUrlForm = styled.form(
     button: {
       borderTopLeftRadius: 0,
       borderBottomLeftRadius: 0,
+      width: ["100%", "auto"],
     },
   }),
 );

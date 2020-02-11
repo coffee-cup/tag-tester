@@ -12,7 +12,7 @@ import Error from "./Error";
 
 const StyledResults = styled.div(
   css({
-    px: [0, 0, 4],
+    px: [0, 0, 2],
     py: [2, 2, 4],
   }),
 );
@@ -30,25 +30,28 @@ const StyledTags = styled.div(
   }),
 );
 
-const TagName = styled.div(
+const TagName = styled.td(
   css({
     fontWeight: "bold",
+    wordBreak: "break-all",
+    minWidth: ["6rem", "8rem"],
+    p: 2,
   }),
 );
 
-const TagValue = styled.div(
+const TagValue = styled.td(
   css({
     position: "relative",
+    wordBreak: "break-all",
+    p: 2,
   }),
 );
 
-const StyledTagRow = styled.div<{ highlight: boolean }>(props =>
+const Table = styled.table(css({}));
+
+const StyledTagRow = styled.tr<{ highlight: boolean }>(props =>
   css({
-    display: "grid",
-    alignItems: "center",
-    gridTemplateColumns: "140px 1fr",
     bg: props.highlight ? "transparent" : "muted",
-    p: 2,
     cursor: "pointer",
   }),
 );
@@ -189,9 +192,13 @@ const Tags = () => {
     <StyledTags>
       <h3>Tags</h3>
 
-      {results.tags.map((tag, i) => (
-        <TagRow key={i} tag={tag} highlight={i % 2 === 0} />
-      ))}
+      <Table>
+        <tbody>
+          {results.tags.map((tag, i) => (
+            <TagRow key={i} tag={tag} highlight={i % 2 === 0} />
+          ))}
+        </tbody>
+      </Table>
     </StyledTags>
   );
 };
@@ -226,7 +233,7 @@ const Results = () => {
   const { results } = useOG();
 
   return (
-    <StyledResults>
+    <StyledResults className="results">
       {results.type === "loading" ? (
         <Loading />
       ) : results.type === "not-fetched" ? (
