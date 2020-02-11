@@ -71,24 +71,23 @@ const DebuggerLinks = () => (
 export const Info = () => {
   const { results } = useOG();
 
-  if (results.type !== "success") {
-    return null;
-  }
-
   return (
     <StyledInfo>
-      <h3>Testing</h3>
-
-      <p>Use this url</p>
-
-      <UrlContainer>
-        <a href={results.customUrl}>{results.customUrl}</a>
-      </UrlContainer>
+      <h3>What</h3>
 
       <p>
-        on the following sites to check what it will look like when shared on
-        social
+        When you enter a url above, we will fetch all metadata tags. You can
+        edit those tags and use the generated url to test what it will look like
+        when shared on social.
       </p>
+
+      {results.type === "success" && (
+        <UrlContainer>
+          <a href={results.customUrl}>{results.customUrl}</a>
+        </UrlContainer>
+      )}
+
+      <h3>Social sites</h3>
 
       <DebuggerLinks />
 

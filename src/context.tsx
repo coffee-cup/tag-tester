@@ -37,9 +37,11 @@ export const useOG = (): State & Actions => {
   return state;
 };
 
+const startingUrl = "https://tagtester.dev";
+
 export const OGProvider: React.FC = props => {
   const [state, setState] = React.useState<State>({
-    url: "https://tag-tester.now.sh",
+    url: startingUrl,
     results: { type: "loading" },
     isUrlError: null,
   });

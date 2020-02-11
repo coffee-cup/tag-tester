@@ -6,6 +6,7 @@ import { isImageTag } from "../tags";
 import { MetaTag } from "../types";
 import { Edit2, Check } from "react-feather";
 import Input from "./Input";
+import Loading from "./Loading";
 
 const StyledResults = styled.div(
   css({
@@ -197,7 +198,7 @@ const Results = () => {
   const { results } = useOG();
 
   if (results.type !== "success") {
-    return null;
+    return <Loading />;
   }
 
   return (
