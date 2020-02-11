@@ -2,7 +2,6 @@ import * as React from "react";
 import { validUrl } from "./utils";
 import { MetaTag, TagResult } from "./types";
 import { getValueProp, createCustomUrl } from "./tags";
-import * as api from "./api";
 import Router from "next/router";
 
 export type Results =
@@ -138,19 +137,6 @@ export const OGProvider: React.FC<{
     editedTagsRef.current.clear();
 
     Router.push(`/?url=${encodeURIComponent(state.url)}`);
-
-    try {
-      const tagResult = await api.fetchTags(state.url);
-      setState({
-        ...state,
-        results: getResults(tagResult, undefined, editedTagsRef.current),
-      });
-    } catch (e) {
-      setState({
-        ...state,
-        results: getResults(undefined, e.message ?? "There was an error"),
-      });
-    }
   };
 
   const editTag = (tag: MetaTag, value: string) => {
