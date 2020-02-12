@@ -9,6 +9,7 @@ import Header from "../components/Header";
 import Info from "../components/Info";
 import { withLayout } from "../components/Layout";
 import Results from "../components/Results";
+import { useOG } from "../context";
 
 const StyledHome = styled.div(css({}));
 
@@ -18,21 +19,25 @@ const Full = styled.div(
   }),
 );
 
-const Split = styled.div(
+const Split = styled.div<{ notFetched: boolean }>(props =>
   css({
     display: ["block", "block", "grid"],
-    gridTemplateColumns: ["40% 60%"],
+    gridTemplateColumns: props.notFetched ? "50% 50%" : "40% 60%",
+
+    transition: "grid-template-columns 50ms ease-out",
   }),
 );
 
 const Home: NextPage = () => {
+  const { results } = useOG();
+
   return (
     <StyledHome>
       <Full>
         <Header />
 
-        <Container large>
-          <Split>
+        <Container large={results.type !== "not-fetched"}>
+          <Split notFetched={results.type === "not-fetched"}>
             <Info />
             <Results />
           </Split>

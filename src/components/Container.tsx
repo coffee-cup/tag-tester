@@ -6,6 +6,8 @@ const Container = styled.div<{ large?: boolean }>(props =>
     maxWidth: props.large ? "largeContainer" : "container",
     mx: "auto",
     px: [2, 3, 4],
+
+    transition: "max-width 50ms ease-out",
   }),
 );
 
