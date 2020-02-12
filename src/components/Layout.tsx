@@ -6,6 +6,7 @@ import styled from "@emotion/styled";
 import css from "@styled-system/css";
 import { OGProvider } from "../context";
 import SEO from "./SEO";
+import Head from "next/head";
 
 const Content = styled(Styled.root)(
   css({
@@ -28,6 +29,17 @@ const Layout: React.FC<{
         error={props.error}
         url={props.fetchedUrl}
       >
+        <Head>
+          <script
+            async
+            defer
+            src="https://hello.jakerunzer.com/app.js"
+          ></script>
+          <noscript>
+            <img src="https://hello.jakerunzer.com/image.gif" alt="" />
+          </noscript>{" "}
+        </Head>
+
         <SEO />
         <Content>{props.children}</Content>
       </OGProvider>
