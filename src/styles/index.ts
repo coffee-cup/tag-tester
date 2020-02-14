@@ -27,12 +27,15 @@ const theme: Theme = {
   colors: {
     text: "#333",
     background: "white",
-    primary: "#1fa2ff",
+    primary: "#045aff",
     secondary: "#a6ffcb",
     accent: "#12d8fa",
     muted: "#eff0f6",
     border: "#b0b0b0",
-    grey: "#a2a2a2",
+    grey: {
+      400: "#a2a2a2",
+      500: "grey",
+    },
     error: "red",
   },
   breakpoints: ["40em", "52em", "64em"],

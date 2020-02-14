@@ -23,6 +23,7 @@ const Split = styled.div<{ notFetched: boolean }>(props =>
   css({
     display: ["block", "block", "grid"],
     gridTemplateColumns: props.notFetched ? "50% 50%" : "40% 60%",
+    py: 4,
 
     transition: "grid-template-columns 50ms ease-out",
   }),

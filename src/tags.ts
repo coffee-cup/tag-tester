@@ -1,6 +1,12 @@
 import { MetaTag } from "./types";
 import { rootUrl } from "./utils";
 
+export enum FilterType {
+  Html,
+  OpenGraph,
+  Twitter,
+}
+
 export const htmlTags = ["description"];
 
 export const twitterTags = [
@@ -33,6 +39,11 @@ export const isOGTag = (tag: MetaTag): boolean => {
   return name != null && name.startsWith(ogPrefix);
 };
 
+export const isHTMLTag = (tag: MetaTag): boolean => {
+  const name = tag.name ?? tag.property;
+  return name != null && !isOGTag(tag) && !isTwitterTag(tag);
+};
+
 const imageRegex = /^.*:?image$/;
 export const isImageTag = (tag: MetaTag): boolean => {
   const name = tag.name ?? tag.property;
@@ -62,4 +73,15 @@ export const createCustomUrl = (
     .join("&");
 
   return `${rootUrl}/api/page?${queryString}`;
+};
+
+export const getFilteredTags = (
+  tags: MetaTag[],
+  filters: FilterType[],
+): MetaTag[] => {
+  return [
+    ...(filters.includes(FilterType.Html) ? tags.filter(isHTMLTag) : []),
+    ...(filters.includes(FilterType.OpenGraph) ? tags.filter(isOGTag) : []),
+    ...(filters.includes(FilterType.Twitter) ? tags.filter(isTwitterTag) : []),
+  ];
 };

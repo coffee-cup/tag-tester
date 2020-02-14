@@ -9,6 +9,7 @@ import { Edit2, Check } from "react-feather";
 import Input from "./Input";
 import Loading from "./Loading";
 import Error from "./Error";
+import Settings from "./Settings";
 
 const StyledResults = styled.div(
   css({
@@ -47,7 +48,11 @@ const TagValue = styled.td(
   }),
 );
 
-const Table = styled.table(css({}));
+const Table = styled.table(
+  css({
+    width: "100%",
+  }),
+);
 
 const StyledTagRow = styled.tr<{ highlight: boolean }>(props =>
   css({
@@ -181,6 +186,18 @@ const TagRow: React.FC<{ tag: MetaTag; highlight: boolean }> = ({
   );
 };
 
+const TagHeader = styled.div(
+  css({
+    mb: 2,
+  }),
+);
+
+const TagTitle = styled.h3(
+  css({
+    mb: 2,
+  }),
+);
+
 const Tags = () => {
   const { results } = useOG();
 
@@ -190,11 +207,14 @@ const Tags = () => {
 
   return (
     <StyledTags>
-      <h3>Tags</h3>
+      <TagHeader>
+        <TagTitle>Tags</TagTitle>
+        <Settings />
+      </TagHeader>
 
       <Table>
         <tbody>
-          {results.tags.map((tag, i) => (
+          {results.filteredTags.map((tag, i) => (
             <TagRow key={i} tag={tag} highlight={i % 2 === 0} />
           ))}
         </tbody>

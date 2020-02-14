@@ -28,6 +28,7 @@ const StyledUrlContainer = styled.div(
 
     "&:hover": {
       bg: "primary",
+      color: "white",
       a: {
         bg: "transparent",
         color: "white",
