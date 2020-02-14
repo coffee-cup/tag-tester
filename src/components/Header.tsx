@@ -3,6 +3,7 @@ import css from "@styled-system/css";
 import * as React from "react";
 import Container from "./Container";
 import UrlForm from "./UrlForm";
+import Link from "next/link";
 
 const StyledHeader = styled.header<{ small?: boolean }>(props =>
   css({
@@ -13,12 +14,18 @@ const StyledHeader = styled.header<{ small?: boolean }>(props =>
     textShadow: "1px 1px 10px #3333334f",
     pb: 3,
     py: props.small ? 5 : 6,
+
+    a: {
+      textDecoration: "none",
+    },
   }),
 );
 
 const Title = styled.h1(
   css({
     mb: 3,
+    color: "white",
+    textDecoration: "none",
   }),
 );
 
@@ -34,7 +41,11 @@ const Header: React.FC<{ small?: boolean }> = props => (
     <Container>
       {!props.small && (
         <>
-          <Title>Tag Tester</Title>
+          <Link href="/">
+            <a>
+              <Title>Tag Tester</Title>
+            </a>
+          </Link>
           <SubTitle>
             Test and edit your websites HTML, open graph, and twitter metadata
             tags

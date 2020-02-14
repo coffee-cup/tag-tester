@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import css from "@styled-system/css";
 import { useOG } from "../context";
 import Link from "next/link";
+import copy from "copy-to-clipboard";
 
 const StyledInfo = styled.div(
   css({
@@ -13,11 +14,12 @@ const StyledInfo = styled.div(
   }),
 );
 
-const UrlContainer = styled.div(
+const StyledUrlContainer = styled.div(
   css({
     bg: "secondary",
     p: 2,
     fontSize: 1,
+    wordBreak: "break-all",
     transition: "all 250ms ease-in-out",
 
     a: {
@@ -31,6 +33,21 @@ const UrlContainer = styled.div(
         color: "white",
       },
     },
+  }),
+);
+
+const UrlContainerHeader = styled.div(
+  css({
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    mb: 2,
+  }),
+);
+
+const CopyButton = styled.span(
+  css({
+    cursor: "pointer",
   }),
 );
 
@@ -70,9 +87,45 @@ const DebuggerLinks = () => (
   </DebuggerContainer>
 );
 
-export const Info = () => {
-  const { results } = useOG();
+const useCopy = (): [boolean, (text: string) => void] => {
+  const [showCopied, setShowCopied] = React.useState(false);
+  const copyText = (text: string) => {
+    copy(text);
+    setShowCopied(true);
+    setTimeout(() => {
+      setShowCopied(false);
+    }, 1500);
+  };
 
+  return [showCopied, copyText];
+};
+
+const UrlContainer = () => {
+  const { results } = useOG();
+  const [showCopied, copyText] = useCopy();
+
+  if (results.type !== "success") {
+    return null;
+  }
+
+  return (
+    <StyledUrlContainer>
+      <UrlContainerHeader>
+        <span>Your generated URL</span>
+        <CopyButton
+          onClick={() => {
+            copyText(results.customUrl);
+          }}
+        >
+          {showCopied ? "copied!" : "copy"}
+        </CopyButton>
+      </UrlContainerHeader>
+      <a href={results.customUrl}>{results.customUrl}</a>
+    </StyledUrlContainer>
+  );
+};
+
+export const Info = () => {
   return (
     <StyledInfo className="info">
       <h3>What</h3>
@@ -83,11 +136,7 @@ export const Info = () => {
         when shared on social.
       </p>
 
-      {results.type === "success" && (
-        <UrlContainer>
-          <a href={results.customUrl}>{results.customUrl}</a>
-        </UrlContainer>
-      )}
+      <UrlContainer />
 
       <h3>Social sites</h3>
 
