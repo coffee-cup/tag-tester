@@ -71,7 +71,11 @@ const getResults = (
       type: "success",
       customUrl: createCustomUrl(tagResult.url, editedTags),
       tags: tagResult.tags,
-      filteredTags: getFilteredTags(tagResult.tags, settings.filters),
+      filteredTags: getFilteredTags(
+        tagResult.tags,
+        settings.filters,
+        settings.onlyShowRecommended,
+      ),
     };
   } else if (error != null) {
     return {
@@ -200,6 +204,7 @@ export const OGProvider: React.FC<{
               filteredTags: getFilteredTags(
                 state.results.tags,
                 newSettings.filters,
+                newSettings.onlyShowRecommended,
               ),
             }
           : state.results,

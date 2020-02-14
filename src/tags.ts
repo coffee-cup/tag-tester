@@ -7,24 +7,7 @@ export enum FilterType {
   Twitter,
 }
 
-export const htmlTags = ["description"];
-
-export const twitterTags = [
-  "twitter:card",
-  "twitter:creator",
-  "twitter:title",
-  "twitter:description",
-];
-
-export const openGraphTags = [
-  "og:title",
-  "og:description",
-  "og:url",
-  "og:image",
-  "og:site_name",
-  "og:video",
-  "og:audio",
-];
+export const htmlTags = ["title", "description"];
 
 export const twitterPrefix = "twitter:";
 export const ogPrefix = "og:";
@@ -39,9 +22,13 @@ export const isOGTag = (tag: MetaTag): boolean => {
   return name != null && name.startsWith(ogPrefix);
 };
 
-export const isHTMLTag = (tag: MetaTag): boolean => {
+export const isHTMLTag = (
+  tag: MetaTag,
+  onlyRecommended: boolean = true,
+): boolean => {
   const name = tag.name ?? tag.property;
-  return name != null && !isOGTag(tag) && !isTwitterTag(tag);
+  const isRecommended = onlyRecommended ? htmlTags.includes(name) : true;
+  return name != null && !isOGTag(tag) && !isTwitterTag(tag) && isRecommended;
 };
 
 const imageRegex = /^.*:?image$/;
@@ -78,9 +65,12 @@ export const createCustomUrl = (
 export const getFilteredTags = (
   tags: MetaTag[],
   filters: FilterType[],
+  onlyRecommended: boolean,
 ): MetaTag[] => {
   return [
-    ...(filters.includes(FilterType.Html) ? tags.filter(isHTMLTag) : []),
+    ...(filters.includes(FilterType.Html)
+      ? tags.filter(t => isHTMLTag(t, onlyRecommended))
+      : []),
     ...(filters.includes(FilterType.OpenGraph) ? tags.filter(isOGTag) : []),
     ...(filters.includes(FilterType.Twitter) ? tags.filter(isTwitterTag) : []),
   ];
