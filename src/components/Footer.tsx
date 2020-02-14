@@ -5,12 +5,12 @@ import Container from "./Container";
 
 const StyledFooter = styled.footer(
   css({
-    background: props =>
-      `linear-gradient(to bottom right, ${props.colors.primary}, ${props.colors.secondary})`,
+    bg: "primary",
+    /* background: props =>
+     *   `linear-gradient(to bottom right, ${props.colors.primary}, ${props.colors.secondary})`, */
     color: "white",
     pb: 3,
     py: 3,
-    textShadow: "1px 1px 10px #333333a1",
 
     a: {
       color: "white",
@@ -24,7 +24,7 @@ const StyledFooter = styled.footer(
 
 const Split = styled.div(
   css({
-    display: "flex",
+    display: ["block", "flex"],
     alignItems: "center",
     justifyContent: "space-between",
   }),
