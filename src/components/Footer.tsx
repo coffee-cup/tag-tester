@@ -5,18 +5,15 @@ import Container from "./Container";
 
 const StyledFooter = styled.footer(
   css({
-    bg: "primary",
-    /* background: props =>
-     *   `linear-gradient(to bottom right, ${props.colors.primary}, ${props.colors.secondary})`, */
-    color: "white",
+    bg: "muted",
     pb: 3,
     py: 3,
 
     a: {
-      color: "white",
+      color: "text",
 
       "&:hover": {
-        color: "white",
+        color: "text",
       },
     },
   }),
