@@ -21,7 +21,8 @@ const StyledResults = styled.div(
 const TableImage = styled.img(
   css({
     display: "block",
-    maxWidth: "100%",
+    width: "100%",
+    maxWidth: "20rem",
   }),
 );
 
@@ -35,7 +36,7 @@ const TagName = styled.td(
   css({
     fontWeight: "bold",
     wordBreak: "break-all",
-    minWidth: ["6rem", "8rem"],
+    minWidth: ["8rem", "12rem"],
     p: 2,
   }),
 );
