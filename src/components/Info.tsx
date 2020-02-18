@@ -73,7 +73,7 @@ const DebuggerLinks = () => (
         target="_blank"
         rel="noopenerkj"
       >
-        Faccebook debugger
+        Facebook debugger
       </DebuggerLink>
     </li>
     <li>

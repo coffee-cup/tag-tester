@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { getMetadata } from "../../server/metadata";
-import { generatePage } from "../../server/template";
+import { generateTagPage, createPage } from "../../server/template";
 import { MetaTag } from "../../types";
 import { ogPrefix, twitterPrefix } from "../../tags";
 import { validUrl } from "../../utils";
@@ -46,16 +46,20 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       ),
     );
 
-    const page = generatePage(tags);
+    const page = generateTagPage(url as string, tags, Object.keys(rest));
 
     res.setHeader("Content-Type", "text/html");
     res.status(200).send(page);
   } catch (e) {
-    res.setHeader("Content-Type", "text/html");
-    res.status(400).send(`
+    const errorPage = createPage(
+      "",
+      `
 <h1>${e.message}</h1>
 
 <a href="https://tagtester.dev">Go back to Tag Tester</a>
-`);
+`,
+    );
+    res.setHeader("Content-Type", "text/html");
+    res.status(400).send(errorPage);
   }
 };
