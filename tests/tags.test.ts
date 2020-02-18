@@ -7,16 +7,10 @@ import {
   getValueProp,
   isOGTag,
   isHTMLTag,
-  ogPrefix,
-  twitterPrefix,
   getBase,
 } from "../src/tags";
-import { MetaTag, FilterType } from "../src/types";
-
-const makeTag = (name: string, content: string): MetaTag => ({
-  [name.startsWith(ogPrefix) ? "property" : "name"]: name,
-  [name.startsWith(twitterPrefix) ? "value" : "content"]: content,
-});
+import { FilterType } from "../src/types";
+import { makeTag } from "./utils";
 
 describe("tags", () => {
   it("checks if tag is a twitter tag", () => {
