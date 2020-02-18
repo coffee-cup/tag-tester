@@ -199,7 +199,7 @@ const TagTitle = styled.h3(
 );
 
 const Tags = () => {
-  const { results } = useOG();
+  const { results, settings } = useOG();
 
   if (results.type !== "success") {
     return null;
@@ -212,13 +212,17 @@ const Tags = () => {
         <Settings />
       </TagHeader>
 
-      <Table>
-        <tbody>
-          {results.filteredTags.map((tag, i) => (
-            <TagRow key={i} tag={tag} highlight={i % 2 === 0} />
-          ))}
-        </tbody>
-      </Table>
+      {settings.filters.length === 0 ? (
+        <p>No filters selected</p>
+      ) : (
+        <Table>
+          <tbody>
+            {results.filteredTags.map((tag, i) => (
+              <TagRow key={i} tag={tag} highlight={i % 2 === 0} />
+            ))}
+          </tbody>
+        </Table>
+      )}
     </StyledTags>
   );
 };

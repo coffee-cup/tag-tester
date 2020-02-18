@@ -47,13 +47,11 @@ const Filters = () => {
 
   const toggleFilter = (filter: FilterType) => {
     if (settings.filters.includes(filter)) {
-      if (settings.filters.length !== 1) {
-        // remove filter from list of filters
-        updateSettings({
-          ...settings,
-          filters: settings.filters.filter(f => f !== filter),
-        });
-      }
+      // remove filter from list of filters
+      updateSettings({
+        ...settings,
+        filters: settings.filters.filter(f => f !== filter),
+      });
     } else {
       // add the filter
       updateSettings({
