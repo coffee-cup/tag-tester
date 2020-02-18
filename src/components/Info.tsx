@@ -121,7 +121,9 @@ const UrlContainer = () => {
           {showCopied ? "copied!" : "copy"}
         </CopyButton>
       </UrlContainerHeader>
-      <a href={results.customUrl}>{results.customUrl}</a>
+      <a href={results.customUrl} target="_blank" rel="noopener">
+        {results.customUrl}
+      </a>
     </StyledUrlContainer>
   );
 };
