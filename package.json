@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "next",
     "start": "next start",
-    "build": "next build"
+    "build": "next build",
+    "test": "jest"
   },
   "dependencies": {
     "@emotion/styled": "^10.0.27",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@types/htmlparser2": "^3.10.1",
+    "@types/jest": "^25.1.2",
     "@types/next-seo": "^1.10.0",
     "@types/node": "^13.7.0",
     "@types/node-fetch": "^2.5.4",
@@ -32,8 +34,18 @@
     "@types/styled-system": "^5.1.6",
     "@types/styled-system__css": "^5.0.4",
     "@types/theme-ui": "^0.3.0",
+    "jest": "^25.1.0",
     "next": "^9.2.1",
     "prettier": "^1.19.1",
+    "ts-jest": "^25.2.0",
     "typescript": "^3.7.5"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testPathIgnorePatterns": [
+      "flycheck_*"
+    ]
   }
 }

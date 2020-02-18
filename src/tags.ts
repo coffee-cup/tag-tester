@@ -1,7 +1,7 @@
 import { MetaTag, FilterType } from "./types";
 import { rootUrl } from "./utils";
 
-export const htmlTags = ["title", "description"];
+export const htmlTags = ["title", "description", "image"];
 
 export const twitterPrefix = "twitter:";
 export const ogPrefix = "og:";
@@ -67,7 +67,7 @@ export const getFilteredTags = (
   ];
 };
 
-const getBase = (s: string): string =>
+export const getBase = (s: string): string =>
   s.replace(/^og:/, "").replace(/^twitter:/, "");
 
 export const editAllTags = (
