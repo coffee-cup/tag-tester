@@ -7,7 +7,8 @@
     "dev": "next",
     "start": "next start",
     "build": "next build",
-    "test": "jest"
+    "test": "jest",
+    "lint": "set -ex; tsc -p . --noEmit"
   },
   "dependencies": {
     "@emotion/styled": "^10.0.27",

@@ -13,6 +13,6 @@ jobs:
       with:
         node-version: '13.x'
     - run: yarn install
-    - run: yarn tsc
+    - run: yarn lint
     - run: yarn build
     - run: yarn test
