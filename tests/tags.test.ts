@@ -3,6 +3,7 @@ import {
   getFilteredTags,
   isTwitterTag,
   getNameProp,
+  editAllTags,
   getValueProp,
   isOGTag,
   isHTMLTag,
@@ -92,5 +93,45 @@ describe("tags", () => {
     expect(getBase("title")).toBe("title");
     expect(getBase("og:title")).toBe("title");
     expect(getBase("twitter:title")).toBe("title");
+  });
+
+  it("edits tags", () => {
+    const tags = [
+      makeTag("title", "this is title"),
+      makeTag("viewport", "this is viewport"),
+      makeTag("og:title", "this is image"),
+      makeTag("twitter:title", "this is card"),
+    ];
+
+    {
+      const { newTags, edited } = editAllTags(
+        "title",
+        "new title",
+        tags,
+        false,
+      );
+      expect(newTags).toEqual([
+        makeTag("title", "new title"),
+        tags[1],
+        tags[2],
+        tags[3],
+      ]);
+      expect(edited).toEqual({ title: "new title" });
+    }
+
+    {
+      const { newTags, edited } = editAllTags("title", "new title", tags, true);
+      expect(newTags).toEqual([
+        makeTag("title", "new title"),
+        tags[1],
+        makeTag("og:title", "new title"),
+        makeTag("twitter:title", "new title"),
+      ]);
+      expect(edited).toEqual({
+        title: "new title",
+        "og:title": "new title",
+        "twitter:title": "new title",
+      });
+    }
   });
 });
