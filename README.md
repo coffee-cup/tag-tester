@@ -1,5 +1,7 @@
 # Tag Tester
 
+[![](https://github.com/coffee-cup/tag-tester/workflows/CI/badge.svg)](https://github.com/coffee-cup/tag-tester/actions?query=workflow%3ACI)
+
 Find on [tagtester.dev](https://tagtester.dev).
 
 Test your websites html, open graph and twitter metadata tags.
