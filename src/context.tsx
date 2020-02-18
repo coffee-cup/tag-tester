@@ -1,12 +1,7 @@
 import * as React from "react";
 import { validUrl } from "./utils";
-import { MetaTag, TagResult } from "./types";
-import {
-  createCustomUrl,
-  FilterType,
-  getFilteredTags,
-  editAllTags,
-} from "./tags";
+import { FilterType, MetaTag, TagResult, Settings } from "./types";
+import { createCustomUrl, getFilteredTags, editAllTags } from "./tags";
 import Router from "next/router";
 
 export type Results =
@@ -26,12 +21,6 @@ export type Results =
   | {
       type: "not-fetched";
     };
-
-export interface Settings {
-  onlyShowRecommended: boolean;
-  syncSimilarTags: boolean;
-  filters: FilterType[];
-}
 
 export interface State {
   url: string;
@@ -172,9 +161,10 @@ export const OGProvider: React.FC<{
     }
 
     const { newTags, edited } = editAllTags(
-      tag.name ?? tag.content,
+      tag.name ?? tag.property,
       value,
       state.results.tags,
+      state.settings.syncSimilarTags,
     );
 
     editedTagsRef.current = {

@@ -1,11 +1,5 @@
-import { MetaTag } from "./types";
+import { MetaTag, FilterType } from "./types";
 import { rootUrl } from "./utils";
-
-export enum FilterType {
-  Html,
-  OpenGraph,
-  Twitter,
-}
 
 export const htmlTags = ["title", "description"];
 
@@ -73,18 +67,25 @@ export const getFilteredTags = (
   ];
 };
 
+const getBase = (s: string): string =>
+  s.replace(/^og:/, "").replace(/^twitter:/, "");
+
 export const editAllTags = (
   name: string,
   value: string,
   tags: MetaTag[],
+  syncSimilar: boolean = false,
 ): {
   newTags: MetaTag[];
   edited: { [key: string]: string };
 } => {
   const edited: { [key: string]: string } = {};
   const newTags = tags.map(t => {
-    if (t[getNameProp(t)] === name) {
-      edited[name] = value;
+    if (
+      t[getNameProp(t)] === name ||
+      (syncSimilar && getBase(name) === getBase(t[getNameProp(t)]))
+    ) {
+      edited[t.name ?? t.property] = value;
 
       return {
         ...t,

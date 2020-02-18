@@ -2,7 +2,7 @@ import * as React from "react";
 import styled from "@emotion/styled";
 import css from "@styled-system/css";
 import { useOG } from "../context";
-import { FilterType } from "../tags";
+import { FilterType } from "../types";
 import { Checkbox, Label } from "theme-ui";
 
 const StyledSettings = styled.div(css({}));
@@ -96,6 +96,13 @@ const Settings: React.FC = () => {
     });
   };
 
+  const toggleSyncSimilar = () => {
+    updateSettings({
+      ...settings,
+      syncSimilarTags: !settings.syncSimilarTags,
+    });
+  };
+
   return (
     <StyledSettings>
       <Group>
@@ -105,6 +112,16 @@ const Settings: React.FC = () => {
             onChange={toggleShowRecommended}
           />
           Only show recommended tags
+        </Label>
+      </Group>
+
+      <Group>
+        <Label>
+          <Checkbox
+            checked={settings.syncSimilarTags}
+            onChange={toggleSyncSimilar}
+          />
+          Sync similar tags <i>(e.g. title and og:title)</i>
         </Label>
       </Group>
 
