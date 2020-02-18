@@ -45,15 +45,12 @@ export const getValueProp = (tag: MetaTag): string =>
 
 export const createCustomUrl = (
   url: string,
-  customTags: Map<string, string>,
+  customTags: { [key: string]: string },
 ): string => {
   const query = {
     url,
+    ...customTags,
   };
-
-  for (const [name, value] of Array.from(customTags.entries())) {
-    query[name] = value;
-  }
 
   const queryString = Object.keys(query)
     .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(query[k])}`)
@@ -74,4 +71,32 @@ export const getFilteredTags = (
     ...(filters.includes(FilterType.OpenGraph) ? tags.filter(isOGTag) : []),
     ...(filters.includes(FilterType.Twitter) ? tags.filter(isTwitterTag) : []),
   ];
+};
+
+export const editAllTags = (
+  name: string,
+  value: string,
+  tags: MetaTag[],
+): {
+  newTags: MetaTag[];
+  edited: { [key: string]: string };
+} => {
+  const edited: { [key: string]: string } = {};
+  const newTags = tags.map(t => {
+    if (t[getNameProp(t)] === name) {
+      edited[name] = value;
+
+      return {
+        ...t,
+        [getValueProp(t)]: value,
+      };
+    }
+
+    return t;
+  });
+
+  return {
+    newTags,
+    edited,
+  };
 };

@@ -2,10 +2,10 @@ import * as React from "react";
 import { validUrl } from "./utils";
 import { MetaTag, TagResult } from "./types";
 import {
-  getValueProp,
   createCustomUrl,
   FilterType,
   getFilteredTags,
+  editAllTags,
 } from "./tags";
 import Router from "next/router";
 
@@ -64,7 +64,7 @@ const getResults = (
   settings: Settings,
   tagResult?: TagResult,
   error?: string,
-  editedTags: Map<string, string> = new Map(),
+  editedTags: { [key: string]: string } = {},
 ): Results => {
   if (tagResult != null) {
     return {
@@ -141,7 +141,7 @@ export const OGProvider: React.FC<{
     };
   }, []);
 
-  const editedTagsRef = React.useRef(new Map<string, string>());
+  const editedTagsRef = React.useRef<{ [key: string]: string }>({});
 
   const fetchTags = async () => {
     if (state.url == null || state.url === "") {
@@ -161,7 +161,7 @@ export const OGProvider: React.FC<{
         type: "loading",
       },
     });
-    editedTagsRef.current.clear();
+    editedTagsRef.current = {};
 
     Router.push(`/?url=${encodeURIComponent(state.url)}`);
   };
@@ -171,24 +171,27 @@ export const OGProvider: React.FC<{
       return;
     }
 
-    const newTags = state.results.tags.map(t => {
-      if (t != tag) {
-        return t;
-      }
+    const { newTags, edited } = editAllTags(
+      tag.name ?? tag.content,
+      value,
+      state.results.tags,
+    );
 
-      return {
-        ...t,
-        [getValueProp(t)]: value,
-      };
-    });
-
-    editedTagsRef.current.set(tag.name ?? tag.property, value);
+    editedTagsRef.current = {
+      ...editedTagsRef.current,
+      ...edited,
+    };
 
     setState({
       ...state,
       results: {
         ...state.results,
         tags: newTags,
+        filteredTags: getFilteredTags(
+          newTags,
+          state.settings.filters,
+          state.settings.onlyShowRecommended,
+        ),
         customUrl: createCustomUrl(state.url, editedTagsRef.current),
       },
     });
