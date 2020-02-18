@@ -17,9 +17,10 @@ export const generatePage = (tags: MetaTag[]): string => {
   const meta: string = tags.map(t => generateSingleTag(t)).join("\n");
 
   const html = `
-<html>
+<html lang="en">
 
   <head>
+    <meta charset="utf-8" />
 ${meta}
   </head>
 
