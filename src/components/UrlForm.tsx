@@ -12,15 +12,16 @@ const StyledUrlForm = styled.form(
 
     input: {
       flexGrow: 1,
-      borderTopRightRadius: 0,
-      borderBottomRightRadius: 0,
+      borderTopRightRadius: ["2px", 0],
+      borderBottomRightRadius: ["2px", 0],
       borderRight: 0,
     },
 
     button: {
-      borderTopLeftRadius: 0,
-      borderBottomLeftRadius: 0,
+      borderTopLeftRadius: ["2px", 0],
+      borderBottomLeftRadius: ["2px", 0],
       width: ["100%", "auto"],
+      mt: [2, 0],
     },
   }),
 );

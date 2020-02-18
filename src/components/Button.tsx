@@ -8,7 +8,7 @@ const Button = styled.button<{ primary?: boolean }>(props =>
     backgroundColor: props.primary ? "primary" : "muted",
     minWidth: props.primary ? "10rem" : "auto",
     px: 3,
-    py: 2,
+    py: [3, 2],
     fontSize: 2,
     border: "none",
     borderRadius: "2px",

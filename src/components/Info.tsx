@@ -7,10 +7,9 @@ import copy from "copy-to-clipboard";
 
 const StyledInfo = styled.div(
   css({
-    maxWidth: "measure",
     px: [0, 0, 2],
     pb: [0, 0, 4],
-    pt: 4,
+    py: [2, 2, 4],
   }),
 );
 
