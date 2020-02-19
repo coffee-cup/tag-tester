@@ -1,10 +1,9 @@
 import * as htmlparser2 from "htmlparser2";
 import { MetaTag } from "../types";
 import fetch from "node-fetch";
+import { prefixUrl } from "../utils";
 
-export const getMetadata = async (page: string): Promise<MetaTag[]> => {
-  const html = await fetch(page as string).then(res => res.text());
-
+export const parseTags = (html: string): MetaTag[] => {
   const tags: MetaTag[] = [];
 
   let readingTitle = false;
@@ -33,6 +32,14 @@ export const getMetadata = async (page: string): Promise<MetaTag[]> => {
 
   htmlParser.write(html);
   htmlParser.end();
+
+  return tags;
+};
+
+export const getMetadata = async (page: string): Promise<MetaTag[]> => {
+  const html = await fetch(prefixUrl(page)).then(res => res.text());
+
+  const tags = parseTags(html);
 
   return tags;
 };
