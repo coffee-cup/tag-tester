@@ -3,7 +3,7 @@ import { DefaultSeoProps } from "next-seo";
 const title = "Tag Tester";
 const url = "https://tagtester.dev";
 const description =
-  "Test your websites html, open graph and twitter metadata tags.";
+  "Test and edit your websites html, open graph and twitter metadata tags.";
 const image = "https://tagtester.dev/tagtester.png";
 
 const config: DefaultSeoProps = {
