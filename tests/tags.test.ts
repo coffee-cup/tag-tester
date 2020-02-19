@@ -3,7 +3,8 @@ import {
   getFilteredTags,
   isTwitterTag,
   getNameProp,
-  editAllTags,
+  editTagFromTags,
+  deleteTagFromTags,
   getValueProp,
   isOGTag,
   isHTMLTag,
@@ -58,6 +59,9 @@ describe("tags", () => {
     ).toBe(
       "https://tagtester.dev/api/page?url=https%3A%2F%2Ftagtester.dev&title=a%20test&desc=hello",
     );
+    expect(createCustomUrl("https://tagtester.dev", { title: undefined })).toBe(
+      "https://tagtester.dev/api/page?url=https%3A%2F%2Ftagtester.dev&title=",
+    );
   });
 
   it("gets filtered tags", () => {
@@ -98,7 +102,7 @@ describe("tags", () => {
     ];
 
     {
-      const { newTags, edited } = editAllTags(
+      const { newTags, edited } = editTagFromTags(
         "title",
         "new title",
         tags,
@@ -114,7 +118,12 @@ describe("tags", () => {
     }
 
     {
-      const { newTags, edited } = editAllTags("title", "new title", tags, true);
+      const { newTags, edited } = editTagFromTags(
+        "title",
+        "new title",
+        tags,
+        true,
+      );
       expect(newTags).toEqual([
         makeTag("title", "new title"),
         tags[1],
@@ -127,5 +136,19 @@ describe("tags", () => {
         "twitter:title": "new title",
       });
     }
+  });
+
+  it("deletes tags", () => {
+    const tags = [
+      makeTag("title", "this is title"),
+      makeTag("viewport", "this is viewport"),
+      makeTag("og:title", "this is image"),
+      makeTag("twitter:title", "this is card"),
+    ];
+    const { newTags, edited } = deleteTagFromTags(tags[0], tags);
+
+    expect(newTags).toEqual([tags[1], tags[2], tags[3]]);
+    expect(edited.hasOwnProperty("title")).toBe(true);
+    expect(edited.title).toBeUndefined();
   });
 });

@@ -1,18 +1,6 @@
 import { MetaTag } from "../types";
 import { getNameProp, getValueProp } from "../tags";
 
-const generateSingleTag = (tag: MetaTag): string => {
-  if (tag.name === "title") {
-    return `    <title>${tag.content}</title>`;
-  }
-
-  const nameProp = getNameProp(tag);
-  const valueProp = getValueProp(tag);
-
-  return `    <meta ${nameProp}="${tag.name ??
-    tag.property}" ${valueProp}="${tag.content ?? tag.value}" /> `;
-};
-
 export const createPage = (head: string, body: string): string =>
   `
 <html lang="en">
@@ -58,12 +46,27 @@ ${body}
 </html>
 `;
 
+const generateSingleTag = (tag: MetaTag): string => {
+  if (tag.name === "title") {
+    return `    <title>${tag.content}</title>`;
+  }
+
+  const nameProp = getNameProp(tag);
+  const valueProp = getValueProp(tag);
+
+  return `    <meta ${nameProp}="${tag.name ??
+    tag.property}" ${valueProp}="${tag.content ?? tag.value}" /> `;
+};
+
 export const generateTagPage = (
   url: string,
   tags: MetaTag[],
   customTags: string[],
 ): string => {
-  const meta: string = tags.map(t => generateSingleTag(t)).join("\n");
+  const meta: string = tags
+    .filter(t => !(t.content == null && t.value == null))
+    .map(t => generateSingleTag(t))
+    .join("\n");
 
   const tagItems = customTags.map(t => `<li>${t}</li>`).join("\n");
   const tagMessage =

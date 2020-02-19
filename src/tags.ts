@@ -39,7 +39,7 @@ export const getValueProp = (tag: MetaTag): string =>
 
 export const createCustomUrl = (
   url: string,
-  customTags: { [key: string]: string },
+  customTags: { [key: string]: string | undefined },
 ): string => {
   const query = {
     url,
@@ -70,7 +70,7 @@ export const getFilteredTags = (
 export const getBase = (s: string): string =>
   s.replace(/^og:/, "").replace(/^twitter:/, "");
 
-export const editAllTags = (
+export const editTagFromTags = (
   name: string,
   value: string,
   tags: MetaTag[],
@@ -100,4 +100,19 @@ export const editAllTags = (
     newTags,
     edited,
   };
+};
+
+export const deleteTagFromTags = (
+  tag: MetaTag,
+  tags: MetaTag[],
+): {
+  newTags: MetaTag[];
+  edited: { [key: string]: string | undefined };
+} => {
+  const newTags = tags.filter(t => t !== tag);
+  const edited = {
+    [tag.name ?? tag.property]: undefined,
+  };
+
+  return { newTags, edited };
 };

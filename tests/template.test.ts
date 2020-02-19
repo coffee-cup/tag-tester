@@ -15,4 +15,11 @@ describe("html template", () => {
 
     expect(page).toMatchSnapshot();
   });
+
+  it("can generated page with deleted tags", () => {
+    const tags = [makeTag("title", undefined), makeTag("og:image", "a image")];
+    const page = generateTagPage("https://tagtester.dev", tags, ["title"]);
+
+    expect(page).toMatchSnapshot();
+  });
 });

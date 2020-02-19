@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import css from "@styled-system/css";
 import Link from "next/link";
 import { useOG } from "../context";
-import { isImageTag } from "../tags";
+import { isImageTag, getFilteredTags } from "../tags";
 import { MetaTag } from "../types";
 import { Trash, Check } from "react-feather";
 import Input from "./Input";
@@ -147,7 +147,7 @@ const TagRow: React.FC<{ tag: MetaTag; highlight: boolean }> = ({
       className="tag-row"
       highlight={highlight}
       onMouseEnter={() => setShowEdit(true)}
-      onMouseLeave={() => setShowEdit(true)}
+      onMouseLeave={() => setShowEdit(false)}
       onClick={() => {
         if (!isEditing) {
           startEditing();
@@ -216,6 +216,12 @@ const Tags = () => {
     return null;
   }
 
+  const filteredTags = getFilteredTags(
+    results.tags,
+    settings.filters,
+    settings.onlyShowRecommended,
+  );
+
   return (
     <StyledTags>
       <TagHeader>
@@ -228,7 +234,7 @@ const Tags = () => {
       ) : (
         <Table>
           <tbody>
-            {results.filteredTags.map((tag, i) => (
+            {filteredTags.map((tag, i) => (
               <TagRow key={i} tag={tag} highlight={i % 2 === 0} />
             ))}
           </tbody>

@@ -31,18 +31,27 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const tags: MetaTag[] = [];
 
+    const deletedTags: Set<string> = new Set(
+      Object.keys(rest).filter(k => rest[k] === "undefined"),
+    );
+
     tags.push(
-      ...Object.keys(rest).map(k => ({
-        [getNameProp(k)]: k,
-        [getValueProp(k)]: rest[k],
-      })),
+      ...Object.keys(rest)
+        .filter(k => rest[k] !== "undefined")
+        .map(k => ({
+          [getNameProp(k)]: k,
+          [getValueProp(k)]: rest[k],
+        })),
     );
 
     const tagNames: Set<string> = new Set(Object.keys(rest));
 
     tags.push(
       ...(await getMetadata(url as string)).filter(
-        t => !tagNames.has(t.name) && !tagNames.has(t.property),
+        t =>
+          !tagNames.has(t.name) &&
+          !tagNames.has(t.property) &&
+          !deletedTags.has(t.name ?? t.property),
       ),
     );
 
