@@ -1,3 +1,7 @@
+<p align="center">
+  <img width="100" alt="tag tester logo" src="https://tagtester.dev/tagtester.png">
+</p>
+
 # Tag Tester
 
 ![CI](https://github.com/coffee-cup/tag-tester/workflows/CI/badge.svg)
