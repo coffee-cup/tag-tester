@@ -9,9 +9,10 @@ import {
   isOGTag,
   isHTMLTag,
   getBase,
+  makeTag,
+  createNewTag,
 } from "../src/tags";
 import { FilterType } from "../src/types";
-import { makeTag } from "./utils";
 
 describe("tags", () => {
   it("checks if tag is a twitter tag", () => {
@@ -60,7 +61,7 @@ describe("tags", () => {
       "https://tagtester.dev/api/page?url=https%3A%2F%2Ftagtester.dev&title=a%20test&desc=hello",
     );
     expect(createCustomUrl("https://tagtester.dev", { title: undefined })).toBe(
-      "https://tagtester.dev/api/page?url=https%3A%2F%2Ftagtester.dev&title=",
+      "https://tagtester.dev/api/page?url=https%3A%2F%2Ftagtester.dev&title=undefined",
     );
   });
 
@@ -91,6 +92,22 @@ describe("tags", () => {
     expect(getBase("title")).toBe("title");
     expect(getBase("og:title")).toBe("title");
     expect(getBase("twitter:title")).toBe("title");
+  });
+
+  it("creates new tag", () => {
+    const tags = [makeTag("title", "this is title")];
+
+    {
+      const { newTags, edited } = createNewTag("hello", "world", []);
+      expect(newTags).toEqual([makeTag("hello", "world")]);
+      expect(edited).toEqual({ hello: "world" });
+    }
+
+    {
+      const { newTags, edited } = createNewTag("hello", "world", tags);
+      expect(newTags).toEqual([...tags, makeTag("hello", "world")]);
+      expect(edited).toEqual({ hello: "world" });
+    }
   });
 
   it("edits tags", () => {

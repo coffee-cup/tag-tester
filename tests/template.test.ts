@@ -1,5 +1,5 @@
 import { generateTagPage } from "../src/server/template";
-import { makeTag } from "./utils";
+import { makeTag } from "../src/tags";
 
 describe("html template", () => {
   it("can generate page from tags", () => {

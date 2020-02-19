@@ -1,7 +1,12 @@
 import * as React from "react";
 import { validUrl } from "./utils";
 import { FilterType, MetaTag, TagResult, Settings } from "./types";
-import { createCustomUrl, editTagFromTags, deleteTagFromTags } from "./tags";
+import {
+  createCustomUrl,
+  createNewTag,
+  editTagFromTags,
+  deleteTagFromTags,
+} from "./tags";
 import Router from "next/router";
 
 export type Results =
@@ -32,6 +37,7 @@ export interface State {
 export interface Actions {
   setUrl: (value: string) => void;
   fetchTags: () => void;
+  addTag: (name: string, content: string) => void;
   deleteTag: (tag: MetaTag) => void;
   editTag: (tag: MetaTag, value: string) => void;
   updateSettings: (newSettings: Settings) => void;
@@ -156,40 +162,13 @@ export const OGProvider: React.FC<{
     Router.push(`/?url=${encodeURIComponent(state.url)}`);
   };
 
-  const deleteTag = (tag: MetaTag) => {
+  const updateTags = (
+    newTags: MetaTag[],
+    edited: { [key: string]: string | undefined },
+  ) => {
     if (state.results.type !== "success") {
       return;
     }
-
-    const { newTags, edited } = deleteTagFromTags(tag, state.results.tags);
-
-    const newEdited = {
-      ...state.edited,
-      ...edited,
-    };
-
-    setState({
-      ...state,
-      edited: newEdited,
-      results: {
-        ...state.results,
-        tags: newTags,
-        customUrl: createCustomUrl(state.url, newEdited),
-      },
-    });
-  };
-
-  const editTag = (tag: MetaTag, value: string) => {
-    if (state.results.type !== "success") {
-      return;
-    }
-
-    const { newTags, edited } = editTagFromTags(
-      tag.name ?? tag.property,
-      value,
-      state.results.tags,
-      state.settings.syncSimilarTags,
-    );
 
     const newEdited: { [key: string]: string | undefined } = {
       ...state.edited,
@@ -205,6 +184,38 @@ export const OGProvider: React.FC<{
         customUrl: createCustomUrl(state.url, newEdited),
       },
     });
+  };
+
+  const deleteTag = (tag: MetaTag) => {
+    if (state.results.type !== "success") {
+      return;
+    }
+
+    const { newTags, edited } = deleteTagFromTags(tag, state.results.tags);
+    updateTags(newTags, edited);
+  };
+
+  const addTag = (name: string, content: string) => {
+    if (state.results.type !== "success") {
+      return;
+    }
+
+    const { newTags, edited } = createNewTag(name, content, state.results.tags);
+    updateTags(newTags, edited);
+  };
+
+  const editTag = (tag: MetaTag, value: string) => {
+    if (state.results.type !== "success") {
+      return;
+    }
+
+    const { newTags, edited } = editTagFromTags(
+      tag.name ?? tag.property,
+      value,
+      state.results.tags,
+      state.settings.syncSimilarTags,
+    );
+    updateTags(newTags, edited);
   };
 
   const updateSettings = (newSettings: Settings) => {
@@ -223,6 +234,7 @@ export const OGProvider: React.FC<{
       });
     },
     fetchTags,
+    addTag,
     deleteTag,
     editTag,
     updateSettings,
