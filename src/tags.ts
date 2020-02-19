@@ -21,7 +21,8 @@ export const isHTMLTag = (
   onlyRecommended: boolean = true,
 ): boolean => {
   const name = getName(tag);
-  const isRecommended = onlyRecommended ? htmlTags.includes(name) : true;
+  const isRecommended =
+    tag.created || (onlyRecommended ? htmlTags.includes(name) : true);
   return name != null && !isOGTag(tag) && !isTwitterTag(tag) && isRecommended;
 };
 
@@ -69,15 +70,18 @@ export const getFilteredTags = (
   tags: MetaTag[],
   filters: FilterType[],
   onlyRecommended: boolean,
-): MetaTag[] => {
-  return [
-    ...(filters.includes(FilterType.Html)
-      ? tags.filter(t => isHTMLTag(t, onlyRecommended))
-      : []),
-    ...(filters.includes(FilterType.OpenGraph) ? tags.filter(isOGTag) : []),
-    ...(filters.includes(FilterType.Twitter) ? tags.filter(isTwitterTag) : []),
-  ];
-};
+): MetaTag[] =>
+  tags.filter(t => {
+    if (isHTMLTag(t, onlyRecommended)) {
+      return filters.includes(FilterType.Html);
+    } else if (isOGTag(t)) {
+      return filters.includes(FilterType.OpenGraph);
+    } else if (isTwitterTag(t)) {
+      return filters.includes(FilterType.Twitter);
+    }
+
+    return false;
+  });
 
 export const getBase = (s: string): string =>
   s.replace(/^og:/, "").replace(/^twitter:/, "");
@@ -137,7 +141,7 @@ export const createNewTag = (
   newTags: MetaTag[];
   edited: { [key: string]: string };
 } => {
-  const newTag = makeTag(name, content);
+  const newTag: MetaTag = { ...makeTag(name, content), created: true };
   const edited = {
     [name]: content,
   };

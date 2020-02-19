@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import css from "@styled-system/css";
 import Link from "next/link";
 import { useOG } from "../context";
-import { isImageTag, getFilteredTags } from "../tags";
+import { isImageTag, getFilteredTags, getName } from "../tags";
 import { MetaTag } from "../types";
 import { Trash, Check } from "react-feather";
 import Input from "./Input";
@@ -56,6 +56,18 @@ const Table = styled.table(
   }),
 );
 
+const TagHeader = styled.div(
+  css({
+    mb: 2,
+  }),
+);
+
+const TagTitle = styled.h3(
+  css({
+    mb: 2,
+  }),
+);
+
 const StyledTagRow = styled.tr<{ highlight: boolean }>(props =>
   css({
     bg: props.highlight ? "transparent" : "muted",
@@ -81,13 +93,26 @@ const IconContainer = styled.div<{ show: boolean }>(props =>
   }),
 );
 
-const TagInput = styled(Input)(
+const TagInput = styled(Input)<{ isError?: boolean }>(props =>
   css({
     width: "100%",
     py: 2,
     pr: 4,
     border: "solid 1px",
-    borderColor: "primary",
+    borderColor: props.isError ? "error" : "primary",
+  }),
+);
+
+const NewRowText = styled.span(
+  css({
+    color: "grey.500",
+  }),
+);
+
+const ErrorText = styled.span(
+  css({
+    color: "error",
+    fontSize: 1,
   }),
 );
 
@@ -165,8 +190,7 @@ const TagRow: React.FC<{ tag: MetaTag; highlight: boolean }> = ({
           }}
         >
           {isEditing ? <Check size="16px" /> : <Trash size="14px" />}
-        </IconContainer>
-
+        </IconContainer>{" "}
         {isEditing ? (
           <form
             onSubmit={e => {
@@ -197,17 +221,81 @@ const TagRow: React.FC<{ tag: MetaTag; highlight: boolean }> = ({
   );
 };
 
-const TagHeader = styled.div(
-  css({
-    mb: 2,
-  }),
-);
+const AddRow: React.FC<{ highlight: boolean }> = props => {
+  const { results, addTag } = useOG();
 
-const TagTitle = styled.h3(
-  css({
-    mb: 2,
-  }),
-);
+  const [isEditing, setIsEditing] = React.useState(false);
+
+  const [name, setName] = React.useState("");
+  const [value, setValue] = React.useState("");
+
+  const nameExists = React.useMemo(() => {
+    if (results.type !== "success") {
+      return false;
+    }
+
+    return results.tags.find(t => getName(t) === name) != null;
+  }, [name, results]);
+
+  const createRow = () => {
+    if (!nameExists) {
+      addTag(name, value);
+
+      setIsEditing(false);
+      setName("");
+      setValue("");
+    }
+  };
+
+  return (
+    <StyledTagRow
+      highlight={props.highlight}
+      onClick={() => {
+        setIsEditing(true);
+      }}
+    >
+      <TagName className="tag-name-add">
+        {isEditing ? (
+          <>
+            {nameExists && <ErrorText>tag already exists</ErrorText>}
+            <TagInput
+              autoFocus
+              isError={nameExists}
+              value={name}
+              onChange={e => setName(e.target.value)}
+              placeholder="tag name"
+            />
+          </>
+        ) : (
+          <NewRowText>Click to</NewRowText>
+        )}
+      </TagName>
+
+      <TagValue className="tag-value-add">
+        <IconContainer
+          show={isEditing}
+          onClick={e => {
+            e.preventDefault();
+            e.stopPropagation();
+            createRow();
+          }}
+        >
+          {isEditing ? <Check size="16px" /> : <Trash size="14px" />}
+        </IconContainer>
+
+        {isEditing ? (
+          <TagInput
+            value={value}
+            onChange={e => setValue(e.target.value)}
+            placeholder="tag value"
+          />
+        ) : (
+          <NewRowText>create row</NewRowText>
+        )}
+      </TagValue>
+    </StyledTagRow>
+  );
+};
 
 const Tags = () => {
   const { results, settings } = useOG();
@@ -237,6 +325,8 @@ const Tags = () => {
             {filteredTags.map((tag, i) => (
               <TagRow key={i} tag={tag} highlight={i % 2 === 0} />
             ))}
+
+            <AddRow highlight={filteredTags.length % 2 === 0} />
           </tbody>
         </Table>
       )}

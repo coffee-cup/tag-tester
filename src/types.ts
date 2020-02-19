@@ -3,6 +3,7 @@ export interface MetaTag {
   property?: string;
   content?: string;
   value?: string;
+  created?: boolean;
 }
 
 export interface TagResult {
