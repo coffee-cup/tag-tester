@@ -32,6 +32,7 @@ export interface State {
 export interface Actions {
   setUrl: (value: string) => void;
   fetchTags: () => void;
+  deleteTag: (tag: MetaTag) => void;
   editTag: (tag: MetaTag, value: string) => void;
   updateSettings: (newSettings: Settings) => void;
 }
@@ -155,6 +156,26 @@ export const OGProvider: React.FC<{
     Router.push(`/?url=${encodeURIComponent(state.url)}`);
   };
 
+  const deleteTag = (tag: MetaTag) => {
+    if (state.results.type !== "success") {
+      return;
+    }
+
+    const newTags = state.results.tags.filter(t => t !== tag);
+    setState({
+      ...state,
+      results: {
+        ...state.results,
+        tags: newTags,
+        filteredTags: getFilteredTags(
+          newTags,
+          state.settings.filters,
+          state.settings.onlyShowRecommended,
+        ),
+      },
+    });
+  };
+
   const editTag = (tag: MetaTag, value: string) => {
     if (state.results.type !== "success") {
       return;
@@ -214,6 +235,7 @@ export const OGProvider: React.FC<{
       });
     },
     fetchTags,
+    deleteTag,
     editTag,
     updateSettings,
   };

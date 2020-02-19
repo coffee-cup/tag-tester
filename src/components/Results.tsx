@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useOG } from "../context";
 import { isImageTag } from "../tags";
 import { MetaTag } from "../types";
-import { Edit2, Check } from "react-feather";
+import { Trash, Check } from "react-feather";
 import Input from "./Input";
 import Loading from "./Loading";
 import Error from "./Error";
@@ -52,6 +52,7 @@ const TagValue = styled.td(
 const Table = styled.table(
   css({
     width: "100%",
+    pr: 4,
   }),
 );
 
@@ -68,11 +69,13 @@ const IconContainer = styled.div<{ show: boolean }>(props =>
     display: "flex",
     alignItems: "center",
     top: 0,
-    right: 2,
+    right: 0,
+    pl: 2,
     height: "100%",
     color: "grey",
     cursor: "pointer",
     opacity: props.show ? "1" : "0",
+    transform: "translateX(100%)",
 
     transition: "opacity 250ms ease-in-out",
   }),
@@ -92,7 +95,7 @@ const TagRow: React.FC<{ tag: MetaTag; highlight: boolean }> = ({
   tag,
   highlight,
 }) => {
-  const { editTag } = useOG();
+  const { editTag, deleteTag } = useOG();
 
   const [showEdit, setShowEdit] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
@@ -135,7 +138,7 @@ const TagRow: React.FC<{ tag: MetaTag; highlight: boolean }> = ({
     if (isEditing) {
       finishEditing();
     } else {
-      startEditing();
+      deleteTag(tag);
     }
   };
 
@@ -144,7 +147,7 @@ const TagRow: React.FC<{ tag: MetaTag; highlight: boolean }> = ({
       className="tag-row"
       highlight={highlight}
       onMouseEnter={() => setShowEdit(true)}
-      onMouseLeave={() => setShowEdit(false)}
+      onMouseLeave={() => setShowEdit(true)}
       onClick={() => {
         if (!isEditing) {
           startEditing();
@@ -153,8 +156,15 @@ const TagRow: React.FC<{ tag: MetaTag; highlight: boolean }> = ({
     >
       <TagName className="tag-name">{tag.name ?? tag.property}</TagName>
       <TagValue className="tag-value">
-        <IconContainer show={showEdit} onClick={() => iconClick()}>
-          {isEditing ? <Check size="16px" /> : <Edit2 size="14px" />}
+        <IconContainer
+          show={showEdit}
+          onClick={e => {
+            iconClick();
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+        >
+          {isEditing ? <Check size="16px" /> : <Trash size="14px" />}
         </IconContainer>
 
         {isEditing ? (
