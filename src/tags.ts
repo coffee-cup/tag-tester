@@ -1,6 +1,16 @@
 import { MetaTag, FilterType } from "./types";
 import { rootUrl } from "./utils";
 
+export const getNameProp = (tag: MetaTag): string =>
+  tag.name != null ? "name" : "property";
+
+export const getValueProp = (tag: MetaTag): string =>
+  tag.content != null ? "content" : "value";
+
+export const getName = (tag: MetaTag): string => tag.name ?? tag.property;
+
+export const getValue = (tag: MetaTag): string => tag.content ?? tag.value;
+
 export const htmlTags = ["title", "description", "image"];
 
 export const twitterPrefix = "twitter:";
@@ -12,7 +22,7 @@ export const isTwitterTag = (tag: MetaTag): boolean => {
 };
 
 export const isOGTag = (tag: MetaTag): boolean => {
-  const name = tag.name ?? tag.property;
+  const name = getName(tag);
   return name != null && name.startsWith(ogPrefix);
 };
 
@@ -32,23 +42,22 @@ export const isImageTag = (tag: MetaTag): boolean => {
   return imageRegex.test(name);
 };
 
-export const getNameProp = (tag: MetaTag): string =>
-  tag.name != null ? "name" : "property";
-
-export const getValueProp = (tag: MetaTag): string =>
-  tag.content != null ? "content" : "value";
-
-export const getName = (tag: MetaTag): string => tag.name ?? tag.property;
-
-export const getValue = (tag: MetaTag): string => tag.content ?? tag.value;
-
 export const makeTag = (
   name: string,
   content: string | undefined,
-): MetaTag => ({
-  [name.startsWith(ogPrefix) ? "property" : "name"]: name,
-  [name.startsWith(twitterPrefix) ? "value" : "content"]: content,
-});
+  created?: boolean,
+): MetaTag => {
+  const newTag: MetaTag = {
+    [name.startsWith(ogPrefix) ? "property" : "name"]: name,
+    [name.startsWith(twitterPrefix) ? "value" : "content"]: content,
+  };
+
+  if (created) {
+    newTag.created = created;
+  }
+
+  return newTag;
+};
 
 export const createCustomUrl = (
   url: string,
@@ -141,7 +150,7 @@ export const createNewTag = (
   newTags: MetaTag[];
   edited: { [key: string]: string };
 } => {
-  const newTag: MetaTag = { ...makeTag(name, content), created: true };
+  const newTag = makeTag(name, content, true);
   const edited = {
     [name]: content,
   };

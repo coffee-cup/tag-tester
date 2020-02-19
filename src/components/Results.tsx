@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 import css from "@styled-system/css";
 import Link from "next/link";
 import { useOG } from "../context";
-import { isImageTag, getFilteredTags, getName } from "../tags";
+import { isImageTag, getFilteredTags, getName, getValue } from "../tags";
 import { MetaTag } from "../types";
 import { Trash, Check } from "react-feather";
 import Input from "./Input";
@@ -124,9 +124,7 @@ const TagRow: React.FC<{ tag: MetaTag; highlight: boolean }> = ({
 
   const [showEdit, setShowEdit] = React.useState(false);
   const [isEditing, setIsEditing] = React.useState(false);
-  const [editedValue, setEditedValue] = React.useState(
-    tag.content ?? tag.value,
-  );
+  const [editedValue, setEditedValue] = React.useState(getValue(tag));
   const inputRef = React.useRef<HTMLInputElement>();
 
   const showImage = isImageTag(tag) && !isEditing;
@@ -141,7 +139,7 @@ const TagRow: React.FC<{ tag: MetaTag; highlight: boolean }> = ({
   };
 
   React.useEffect(() => {
-    setEditedValue(tag.content ?? tag.value);
+    setEditedValue(getValue(tag));
   }, [tag.content, tag.value]);
 
   React.useEffect(() => {
@@ -179,7 +177,7 @@ const TagRow: React.FC<{ tag: MetaTag; highlight: boolean }> = ({
         }
       }}
     >
-      <TagName className="tag-name">{tag.name ?? tag.property}</TagName>
+      <TagName className="tag-name">{getName(tag)}</TagName>
       <TagValue className="tag-value">
         <IconContainer
           show={showEdit}
@@ -208,10 +206,10 @@ const TagRow: React.FC<{ tag: MetaTag; highlight: boolean }> = ({
         ) : (
           <>
             {!showImage ? (
-              tag.content ?? tag.value
+              getValue(tag)
             ) : (
-              <a href={tag.content ?? tag.value}>
-                <TableImage alt="" src={tag.content ?? tag.value} />
+              <a href={getValue(tag)}>
+                <TableImage alt="" src={getValue(tag)} />
               </a>
             )}
           </>

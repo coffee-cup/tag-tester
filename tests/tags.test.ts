@@ -2,6 +2,8 @@ import {
   createCustomUrl,
   getFilteredTags,
   isTwitterTag,
+  getName,
+  getValue,
   getNameProp,
   editTagFromTags,
   deleteTagFromTags,
@@ -15,6 +17,23 @@ import {
 import { FilterType } from "../src/types";
 
 describe("tags", () => {
+  it("cam create tags", () => {
+    expect(makeTag("title", "test")).toEqual({
+      name: "title",
+      content: "test",
+    });
+
+    expect(makeTag("og:title", "test")).toEqual({
+      property: "og:title",
+      content: "test",
+    });
+
+    expect(makeTag("twitter:title", "test")).toEqual({
+      name: "twitter:title",
+      value: "test",
+    });
+  });
+
   it("checks if tag is a twitter tag", () => {
     expect(isTwitterTag(makeTag("twitter:image", ""))).toBe(true);
     expect(isTwitterTag(makeTag("og:image", ""))).toBe(false);
@@ -33,12 +52,12 @@ describe("tags", () => {
     expect(isHTMLTag(makeTag("image", ""))).toBe(true);
   });
 
-  it("check if html tag is recommended", () => {
+  it("checks if html tag is recommended", () => {
     expect(isHTMLTag(makeTag("title", ""))).toBe(true);
     expect(isHTMLTag(makeTag("viewport", ""))).toBe(false);
   });
 
-  it("getting name and value props", () => {
+  it("can get name and value props", () => {
     expect(getNameProp(makeTag("image", ""))).toBe("name");
     expect(getNameProp(makeTag("twitter:image", ""))).toBe("name");
     expect(getNameProp(makeTag("og:image", ""))).toBe("property");
@@ -46,6 +65,16 @@ describe("tags", () => {
     expect(getValueProp(makeTag("image", ""))).toBe("content");
     expect(getValueProp(makeTag("twitter:image", ""))).toBe("value");
     expect(getValueProp(makeTag("og:image", ""))).toBe("content");
+  });
+
+  it("gets name and values", () => {
+    expect(getName(makeTag("image", ""))).toBe("image");
+    expect(getName(makeTag("twitter:image", ""))).toBe("twitter:image");
+    expect(getName(makeTag("og:image", ""))).toBe("og:image");
+
+    expect(getValue(makeTag("image", "test 1"))).toBe("test 1");
+    expect(getValue(makeTag("twitter:image", "test 2"))).toBe("test 2");
+    expect(getValue(makeTag("og:image", "test 3"))).toBe("test 3");
   });
 
   it("creates a custom url", () => {
@@ -99,13 +128,13 @@ describe("tags", () => {
 
     {
       const { newTags, edited } = createNewTag("hello", "world", []);
-      expect(newTags).toEqual([makeTag("hello", "world")]);
+      expect(newTags).toEqual([makeTag("hello", "world", true)]);
       expect(edited).toEqual({ hello: "world" });
     }
 
     {
       const { newTags, edited } = createNewTag("hello", "world", tags);
-      expect(newTags).toEqual([...tags, makeTag("hello", "world")]);
+      expect(newTags).toEqual([...tags, makeTag("hello", "world", true)]);
       expect(edited).toEqual({ hello: "world" });
     }
   });
