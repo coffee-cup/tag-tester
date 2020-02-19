@@ -1,3 +1,6 @@
+export const prefixUrl = (url: string): string =>
+  url.startsWith("http") ? url : `https://${url}`;
+
 export const validUrl = (url: any): boolean => {
   if (url == null || typeof url !== "string" || Array.isArray(url)) {
     return false;
@@ -13,7 +16,8 @@ export const validUrl = (url: any): boolean => {
       "(\\#[-a-z\\d_]*)?$", // fragment locator;
     "i", // fragment locator
   );
-  return !!pattern.test(url);
+
+  return pattern.test(prefixUrl(url));
 };
 
 export const rootUrl =
