@@ -108,12 +108,12 @@ const useUrlChange = (urlChanged: (url: string) => void) => {
 
 export const OGProvider: React.FC<{
   tagResult?: TagResult;
-  error?: string;
+  error?: { message: string };
   url?: string;
 }> = props => {
   const getState = (): State => ({
-    url: props.tagResult?.url ?? props.url ?? props.error ?? "",
-    results: getResults(props.tagResult, props.error),
+    url: props.tagResult?.url ?? props.url ?? props.error.message ?? "",
+    results: getResults(props.tagResult, props.error?.message),
     isUrlError:
       props.tagResult != null &&
       props.tagResult.url !== "" &&
@@ -124,7 +124,7 @@ export const OGProvider: React.FC<{
 
   const [state, setState] = React.useState<State>(getState());
 
-  useUrlChange(url =>
+  useUrlChange(url => {
     setState({
       ...state,
       url,
@@ -132,8 +132,8 @@ export const OGProvider: React.FC<{
       results: {
         type: "loading",
       },
-    }),
-  );
+    });
+  });
 
   React.useEffect(() => {
     setState(getState());

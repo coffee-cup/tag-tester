@@ -9,7 +9,7 @@ import SEO from "./SEO";
 
 const Layout: React.FC<{
   tagResult?: TagResult;
-  error?: string;
+  error?: { message: string };
   fetchedUrl?: string;
 }> = props => {
   return (

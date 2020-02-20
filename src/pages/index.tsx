@@ -57,7 +57,7 @@ Page.getInitialProps = async ({ query }) => {
       };
     } catch (e) {
       return {
-        error: e.message,
+        error: { message: e.message },
         fetchedUrl: url,
       };
     }
