@@ -13,6 +13,7 @@ ${head}
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
   font-weight: normal;
+  color: #333;
   margin: 0;
   padding: 2rem;
 }

@@ -13,6 +13,7 @@ exports[`html template can generate page from tags 1`] = `
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, \\"Segoe UI\\", Roboto, \\"Helvetica Neue\\", sans-serif;
   font-weight: normal;
+  color: #333;
   margin: 0;
   padding: 2rem;
 }
@@ -86,6 +87,7 @@ exports[`html template can generate page from tags with no custom 1`] = `
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, \\"Segoe UI\\", Roboto, \\"Helvetica Neue\\", sans-serif;
   font-weight: normal;
+  color: #333;
   margin: 0;
   padding: 2rem;
 }
@@ -153,6 +155,7 @@ exports[`html template can generated page with deleted tags 1`] = `
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, \\"Segoe UI\\", Roboto, \\"Helvetica Neue\\", sans-serif;
   font-weight: normal;
+  color: #333;
   margin: 0;
   padding: 2rem;
 }
