@@ -1,10 +1,9 @@
 /** @jsx jsx */
 import styled from "@emotion/styled";
 import css from "@styled-system/css";
-import NextLink from "next/link";
 import * as React from "react";
 import { Check, Trash } from "react-feather";
-import { Box, jsx, Link, Styled } from "theme-ui";
+import { Box, jsx, Styled } from "theme-ui";
 import { useOG } from "../context";
 import { getFilteredTags, getName, getValue, isImageTag } from "../tags";
 import { MetaTag } from "../types";
@@ -12,6 +11,7 @@ import Error from "./Error";
 import Input from "./Input";
 import Loading from "./Loading";
 import Settings from "./Settings";
+import Examples from "./Examples";
 
 const TableImage = styled.img(
   css({
@@ -325,25 +325,7 @@ const NotFetched = () => (
   <Box>
     <Styled.h2>No tags fetched yet</Styled.h2>
 
-    <Styled.p>Enter a url above or try with one of these examples</Styled.p>
-
-    <Styled.ul>
-      <Styled.li>
-        <NextLink href={`/?url=${encodeURIComponent("https://tagtester.dev")}`}>
-          <Link>tagtester.dev</Link>
-        </NextLink>
-      </Styled.li>
-      <Styled.li>
-        <NextLink href={`/?url=${encodeURIComponent("https://github.com")}`}>
-          <Link>github.com</Link>
-        </NextLink>
-      </Styled.li>
-      <Styled.li>
-        <NextLink href={`/?url=${encodeURIComponent("https://zeit.co")}`}>
-          <Link>zeit.co</Link>
-        </NextLink>
-      </Styled.li>
-    </Styled.ul>
+    <Examples />
   </Box>
 );
 

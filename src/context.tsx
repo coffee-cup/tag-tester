@@ -112,7 +112,7 @@ export const OGProvider: React.FC<{
   url?: string;
 }> = props => {
   const getState = (): State => ({
-    url: props.tagResult?.url ?? props.url ?? props.error.message ?? "",
+    url: props.tagResult?.url ?? props.url ?? props.error?.message ?? "",
     results: getResults(props.tagResult, props.error?.message),
     isUrlError:
       props.tagResult != null &&
