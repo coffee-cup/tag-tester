@@ -7,6 +7,7 @@ export const parseTags = (html: string): MetaTag[] => {
   const tags: MetaTag[] = [];
 
   let readingTitle = false;
+  let inHead = false;
 
   const htmlParser = new htmlparser2.Parser({
     onopentag(name, attribs) {
@@ -16,8 +17,10 @@ export const parseTags = (html: string): MetaTag[] => {
         if (name || property) {
           tags.push({ name, property, content, value });
         }
-      } else if (name === "title") {
+      } else if (name === "title" && inHead) {
         readingTitle = true;
+      } else if (name === "head") {
+        inHead = true;
       }
     },
     ontext(text) {
@@ -25,8 +28,12 @@ export const parseTags = (html: string): MetaTag[] => {
         tags.push({ name: "title", content: text });
       }
     },
-    onclosetag() {
-      readingTitle = false;
+    onclosetag(name) {
+      if (name === "title") {
+        readingTitle = false;
+      } else if (name === "head") {
+        inHead = false;
+      }
     },
   });
 
