@@ -53,7 +53,7 @@ const TagValue = styled.td(
 const Table = styled.table(
   css({
     width: "100%",
-    pr: 4,
+    pr: [0, 4],
   }),
 );
 
@@ -82,7 +82,7 @@ const IconContainer = styled.div<{ show: boolean }>(props =>
     color: "grey",
     cursor: "pointer",
     opacity: props.show ? "1" : "0",
-    transform: "translateX(100%)",
+    transform: ["initial", "translateX(100%)"],
 
     transition: "opacity 250ms ease-in-out",
   }),
@@ -92,7 +92,7 @@ const TagInput = styled(Input)<{ isError?: boolean }>(props =>
   css({
     width: "100%",
     py: 2,
-    pr: 4,
+    pr: [0, 4],
     border: "solid 1px",
     borderColor: props.isError ? "error" : "primary",
   }),
