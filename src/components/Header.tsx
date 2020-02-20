@@ -1,15 +1,17 @@
+/** @jsx jsx */
 import styled from "@emotion/styled";
 import css from "@styled-system/css";
 import * as React from "react";
 import Container from "./Container";
 import UrlForm from "./UrlForm";
 import Link from "next/link";
+import { jsx } from "theme-ui";
 
 const StyledHeader = styled.header<{ small?: boolean }>(props =>
   css({
     background: props =>
       `linear-gradient(to bottom right,
-         ${props.colors.primary}, ${props.colors.accent}, ${props.colors.secondary})`,
+         ${props.colors.primary}, ${props.colors.accent})`,
     color: "white",
     textShadow: "1px 1px 10px #3333334f",
     pb: 3,

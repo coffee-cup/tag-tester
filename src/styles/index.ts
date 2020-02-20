@@ -38,7 +38,7 @@ const theme: Theme = {
     },
     error: "red",
   },
-  breakpoints: ["40em", "52em", "64em"],
+  breakpoints: ["46em", "52em", "64em"],
   fontWeights: {
     body: 400,
     heading: 700,
@@ -47,7 +47,7 @@ const theme: Theme = {
   space: [0, 4, 8, 16, 32, 64, 128, 256, 512],
   fonts: {
     body: font,
-    heading: `"Montserrat", ${font}`,
+    heading: font,
     monospace: "Consolas, Liberation Mono, Menlo, Courier, monospace",
   },
   fontSizes: [12, 14, 16, 20, 24, 32, 48, 64, 96],
@@ -59,6 +59,17 @@ const theme: Theme = {
   lineHeights: {
     body: 1.5,
     heading: 1.125,
+  },
+  links: {
+    none: {
+      color: "currentColor",
+      fontSize: 1,
+      textDecoration: "underline",
+
+      "&:hover": {
+        bg: "transparent",
+      },
+    },
   },
   styles: {
     ...system.styles,
@@ -97,14 +108,16 @@ const theme: Theme = {
         fontStyle: "normal",
         fontWeight: "bold",
       },
-      a: {
-        color: "text",
-        textDecoration: "underline",
-        transition: "all 250ms ease-in-out",
+    },
+    a: {
+      color: "text",
+      textDecoration: "underline",
+      transition: "all 250ms ease-in-out",
+      cursor: "pointer",
 
-        "&:hover": {
-          bg: "secondary",
-        },
+      "&:hover": {
+        bg: "primary",
+        color: "white",
       },
     },
     buttons: {
@@ -164,7 +177,10 @@ const theme: Theme = {
       borderLeft: "solid 4px hsla(0,0%,0%,0.13)",
       color: "hsla(0,0%,0%,0.53)",
     },
-    ul: {},
+    ul: {
+      listStyle: "none",
+      pl: 0,
+    },
     li: {
       pb: 1,
     },

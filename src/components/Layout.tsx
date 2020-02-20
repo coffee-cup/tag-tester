@@ -1,21 +1,11 @@
+/** @jsx jsx */
+import Head from "next/head";
 import * as React from "react";
-import { ThemeProvider, Styled } from "theme-ui";
+import { Box, jsx, ThemeProvider } from "theme-ui";
+import { OGProvider } from "../context";
 import theme from "../styles";
 import { TagResult } from "../types";
-import styled from "@emotion/styled";
-import css from "@styled-system/css";
-import { OGProvider } from "../context";
 import SEO from "./SEO";
-import Head from "next/head";
-
-const Content = styled(Styled.root)(
-  css({
-    color: "text",
-    backgroundColor: "background",
-    mx: "auto",
-    fontSize: 2,
-  }),
-);
 
 const Layout: React.FC<{
   tagResult?: TagResult;
@@ -65,7 +55,17 @@ const Layout: React.FC<{
         </Head>
 
         <SEO />
-        <Content>{props.children}</Content>
+        <Box
+          as="main"
+          className="content"
+          sx={{
+            color: "text",
+            bg: "background",
+            mx: "auto",
+          }}
+        >
+          {props.children}
+        </Box>
       </OGProvider>
     </ThemeProvider>
   );

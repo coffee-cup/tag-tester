@@ -1,90 +1,39 @@
-import * as React from "react";
-import styled from "@emotion/styled";
-import css from "@styled-system/css";
-import { useOG } from "../context";
-import Link from "next/link";
+/** @jsx jsx */
 import copy from "copy-to-clipboard";
-
-const StyledInfo = styled.div(
-  css({
-    px: [0, 0, 2],
-    pb: [0, 0, 4],
-    py: [2, 2, 4],
-  }),
-);
-
-const StyledUrlContainer = styled.div(
-  css({
-    bg: "secondary",
-    p: 2,
-    fontSize: 1,
-    wordBreak: "break-all",
-    transition: "all 250ms ease-in-out",
-
-    a: {
-      color: "black",
-    },
-
-    "&:hover": {
-      bg: "primary",
-      color: "white",
-      a: {
-        bg: "transparent",
-        color: "white",
-      },
-    },
-  }),
-);
-
-const UrlContainerHeader = styled.div(
-  css({
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    mb: 2,
-  }),
-);
-
-const CopyButton = styled.span(
-  css({
-    cursor: "pointer",
-  }),
-);
-
-const DebuggerContainer = styled.ul(css({}));
-
-const DebuggerLink = styled.a(css({}));
+import * as React from "react";
+import { Box, Flex, jsx, Link, Styled, Text } from "theme-ui";
+import { useOG } from "../context";
 
 const DebuggerLinks = () => (
-  <DebuggerContainer>
-    <li>
-      <DebuggerLink
+  <Styled.ul>
+    <Styled.li>
+      <Link
         href="https://cards-dev.twitter.com/validator"
         target="_blank"
         rel="noopenerkj"
       >
         Twitter card validator
-      </DebuggerLink>
-    </li>
-    <li>
-      <DebuggerLink
+      </Link>
+    </Styled.li>
+    <Styled.li>
+      <Link
         href="https://developers.facebook.com/tools/debug/"
         target="_blank"
         rel="noopenerkj"
       >
         Facebook debugger
-      </DebuggerLink>
-    </li>
-    <li>
-      <DebuggerLink
+      </Link>
+    </Styled.li>
+    <Styled.li>
+      <Link
         href="https://www.linkedin.com/post-inspector/inspect/"
         target="_blank"
         rel="noopenerkj"
       >
         LinkedIn inspector
-      </DebuggerLink>
-    </li>
-  </DebuggerContainer>
+      </Link>
+    </Styled.li>
+  </Styled.ul>
 );
 
 const useCopy = (): [boolean, (text: string) => void] => {
@@ -109,60 +58,103 @@ const UrlContainer = () => {
   }
 
   return (
-    <StyledUrlContainer>
-      <UrlContainerHeader>
-        <span>Your generated URL</span>
-        <CopyButton
+    <Box
+      className="url-container"
+      sx={{
+        my: 4,
+        px: 2,
+        py: 3,
+        bg: "muted",
+        borderRadius: "2px",
+        wordBreak: "break-all",
+        transition: "all 150ms ease-in-out",
+
+        "&:hover": {
+          bg: "primary",
+          color: "white",
+        },
+      }}
+    >
+      <Flex
+        sx={{
+          alignItems: "center",
+          justifyContent: "space-between",
+          fontSize: 1,
+          mb: 1,
+        }}
+      >
+        <Text>Your generated URL</Text>
+        <span
+          sx={{ cursor: "pointer" }}
           onClick={() => {
             copyText(results.customUrl);
           }}
         >
           {showCopied ? "copied!" : "copy"}
-        </CopyButton>
-      </UrlContainerHeader>
-      <a href={results.customUrl} target="_blank" rel="noopener">
+        </span>
+      </Flex>
+
+      <Link
+        href={results.customUrl}
+        target="_blank"
+        rel="noopener"
+        variant="none"
+      >
         {results.customUrl}
-      </a>
-    </StyledUrlContainer>
+      </Link>
+    </Box>
   );
 };
 
 export const Info = () => {
   return (
-    <StyledInfo className="info">
-      <h3>What</h3>
+    <Box className="info">
+      <Styled.h2>Getting Started</Styled.h2>
 
-      <p>
+      <Styled.p>
         When you enter a url above, we will fetch all metadata tags. You can
         edit those tags and use the generated url to test what it will look like
         when shared on social.
-      </p>
+      </Styled.p>
 
       <UrlContainer />
 
-      <h3>Social sites</h3>
+      <Styled.h2>Social Sites</Styled.h2>
+
+      <Styled.p>Test the generated URL on the following sites.</Styled.p>
 
       <DebuggerLinks />
 
-      <h3>Help</h3>
+      <Styled.h2>Learn More</Styled.h2>
 
-      <ul>
-        <li>
-          <a
+      <Styled.ul>
+        <Styled.li>
+          <Link
             href="https://www.wordstream.com/meta-tags"
             target="_blank"
             rel="noopener"
           >
-            What are metadata tags
-          </a>
-        </li>
-        <li>
-          <Link href="/about">
-            <a>What is this site</a>
+            What are metatags
           </Link>
-        </li>
-      </ul>
-    </StyledInfo>
+        </Styled.li>
+
+        <Styled.li>
+          <Link href="https://ogp.me/" target="_blank" rel="noopener">
+            Open graph protocol
+          </Link>
+        </Styled.li>
+
+        <Styled.li>
+          <Link
+            href="https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/markup"
+            target="_blank"
+            rel="noopener"
+          >
+            Twitter cards
+          </Link>
+        </Styled.li>
+      </Styled.ul>
+    </Box>
   );
 };
 

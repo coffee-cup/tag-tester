@@ -1,22 +1,17 @@
-import * as React from "react";
+/** @jsx jsx */
 import styled from "@emotion/styled";
 import css from "@styled-system/css";
-import Link from "next/link";
+import NextLink from "next/link";
+import * as React from "react";
+import { Check, Trash } from "react-feather";
+import { Box, jsx, Link, Styled } from "theme-ui";
 import { useOG } from "../context";
-import { isImageTag, getFilteredTags, getName, getValue } from "../tags";
+import { getFilteredTags, getName, getValue, isImageTag } from "../tags";
 import { MetaTag } from "../types";
-import { Trash, Check } from "react-feather";
+import Error from "./Error";
 import Input from "./Input";
 import Loading from "./Loading";
-import Error from "./Error";
 import Settings from "./Settings";
-
-const StyledResults = styled.div(
-  css({
-    px: [0, 0, 2],
-    py: [2, 2, 4],
-  }),
-);
 
 const TableImage = styled.img(
   css({
@@ -57,12 +52,6 @@ const Table = styled.table(
 );
 
 const TagHeader = styled.div(
-  css({
-    mb: 2,
-  }),
-);
-
-const TagTitle = styled.h3(
   css({
     mb: 2,
   }),
@@ -311,12 +300,12 @@ const Tags = () => {
   return (
     <StyledTags>
       <TagHeader>
-        <TagTitle>Tags</TagTitle>
+        <Styled.h2>Tags</Styled.h2>
         <Settings />
       </TagHeader>
 
       {settings.filters.length === 0 ? (
-        <p>No filters selected</p>
+        <Styled.p>No filters selected</Styled.p>
       ) : (
         <Table>
           <tbody>
@@ -333,36 +322,36 @@ const Tags = () => {
 };
 
 const NotFetched = () => (
-  <div>
-    <h3>No tags fetched yet</h3>
+  <Box>
+    <Styled.h2>No tags fetched yet</Styled.h2>
 
-    <p>Enter a url above or try with one of these examples</p>
+    <Styled.p>Enter a url above or try with one of these examples</Styled.p>
 
-    <ul>
-      <li>
-        <Link href={`/?url=${encodeURIComponent("https://tagtester.dev")}`}>
-          <a>tagtester.dev</a>
-        </Link>
-      </li>
-      <li>
-        <Link href={`/?url=${encodeURIComponent("https://github.com")}`}>
-          <a>github.com</a>
-        </Link>
-      </li>
-      <li>
-        <Link href={`/?url=${encodeURIComponent("https://zeit.co")}`}>
-          <a>zeit.co</a>
-        </Link>
-      </li>
-    </ul>
-  </div>
+    <Styled.ul>
+      <Styled.li>
+        <NextLink href={`/?url=${encodeURIComponent("https://tagtester.dev")}`}>
+          <Link>tagtester.dev</Link>
+        </NextLink>
+      </Styled.li>
+      <Styled.li>
+        <NextLink href={`/?url=${encodeURIComponent("https://github.com")}`}>
+          <Link>github.com</Link>
+        </NextLink>
+      </Styled.li>
+      <Styled.li>
+        <NextLink href={`/?url=${encodeURIComponent("https://zeit.co")}`}>
+          <Link>zeit.co</Link>
+        </NextLink>
+      </Styled.li>
+    </Styled.ul>
+  </Box>
 );
 
 const Results = () => {
   const { results } = useOG();
 
   return (
-    <StyledResults className="results">
+    <Box className="results">
       {results.type === "loading" ? (
         <Loading />
       ) : results.type === "not-fetched" ? (
@@ -372,7 +361,7 @@ const Results = () => {
       ) : (
         <Tags />
       )}
-    </StyledResults>
+    </Box>
   );
 };
 
