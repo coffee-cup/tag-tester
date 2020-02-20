@@ -11,7 +11,7 @@ export const getName = (tag: MetaTag): string => tag.name ?? tag.property;
 
 export const getValue = (tag: MetaTag): string => tag.content ?? tag.value;
 
-export const htmlTags = ["title", "description", "image"];
+export const htmlTags = ["title", "description", "image", "author", "date"];
 
 export const twitterPrefix = "twitter:";
 export const ogPrefix = "og:";
