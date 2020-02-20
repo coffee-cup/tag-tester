@@ -12,10 +12,10 @@ import { withLayout } from "../components/Layout";
 import Results from "../components/Results";
 import { useOG } from "../context";
 
-const Split = styled.div<{ notFetched: boolean }>(props =>
+const Split = styled.div<{ success: boolean }>(props =>
   css({
     display: ["grid"],
-    gridTemplateColumns: ["100%", props.notFetched ? "50% 50%" : "40% 60%"],
+    gridTemplateColumns: ["100%", !props.success ? "50% 50%" : "40% 60%"],
     gap: 4,
     py: [4, 5],
 
@@ -31,8 +31,8 @@ const Home: NextPage = () => {
       <Box sx={{ minHeight: "100vh" }}>
         <Header />
 
-        <Container large={results.type !== "not-fetched"}>
-          <Split notFetched={results.type === "not-fetched"}>
+        <Container large={results.type === "success"}>
+          <Split success={results.type === "success"}>
             <Info />
             <Results />
           </Split>

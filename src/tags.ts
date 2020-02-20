@@ -36,7 +36,7 @@ export const isHTMLTag = (
   return name != null && !isOGTag(tag) && !isTwitterTag(tag) && isRecommended;
 };
 
-const imageRegex = /^.*:?image$/;
+const imageRegex = /^.*:?image(:src)?$/;
 export const isImageTag = (tag: MetaTag): boolean => {
   const name = getName(tag);
   return imageRegex.test(name);
