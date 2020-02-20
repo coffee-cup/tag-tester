@@ -148,6 +148,7 @@ export const OGProvider: React.FC<{
         },
       });
 
+      Router.push("/");
       return;
     }
 
