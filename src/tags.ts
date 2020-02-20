@@ -160,3 +160,27 @@ export const createNewTag = (
     edited,
   };
 };
+
+const generateSingleTag = (tag: MetaTag, indent: string = ""): string => {
+  if (tag.name === "title") {
+    return `${indent}<title>${tag.content}</title>`;
+  }
+
+  const nameProp = getNameProp(tag);
+  const valueProp = getValueProp(tag);
+
+  return `${indent}<meta ${nameProp}="${tag.name ??
+    tag.property}" ${valueProp}="${tag.content ?? tag.value}" /> `;
+};
+
+export const generateTagHtml = (
+  tags: MetaTag[],
+  indent: string = "",
+): string => {
+  const meta: string = tags
+    .filter(t => !(t.content == null && t.value == null))
+    .map(t => generateSingleTag(t, indent))
+    .join("\n");
+
+  return meta;
+};

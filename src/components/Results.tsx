@@ -5,7 +5,13 @@ import * as React from "react";
 import { Check, Trash } from "react-feather";
 import { Box, jsx, Styled } from "theme-ui";
 import { useOG } from "../context";
-import { getFilteredTags, getName, getValue, isImageTag } from "../tags";
+import {
+  getFilteredTags,
+  getName,
+  getValue,
+  isImageTag,
+  generateTagHtml,
+} from "../tags";
 import { MetaTag } from "../types";
 import Error from "./Error";
 import Input from "./Input";
@@ -314,6 +320,64 @@ const AddRow: React.FC<{ highlight: boolean }> = props => {
   );
 };
 
+const RawHtml = () => {
+  const { results } = useOG();
+
+  const [show, setShow] = React.useState(false);
+
+  const html = React.useMemo(() => {
+    if (results.type !== "success") {
+      return "";
+    }
+
+    return generateTagHtml(results.tags);
+  }, [results]);
+
+  if (html === "") {
+    return null;
+  }
+
+  return (
+    <Box
+      sx={{
+        pr: 4,
+      }}
+    >
+      <span
+        sx={{
+          cursor: "pointer",
+          textDecoration: "underline",
+          transition: "all 150ms ease-in-out",
+          display: "inline-block",
+          mb: 2,
+          "&:hover": {
+            bg: "primary",
+            color: "white",
+          },
+        }}
+        onClick={() => {
+          setShow(!show);
+        }}
+      >
+        {show ? "hide raw html" : "show raw html"}
+      </span>
+
+      {show && (
+        <Box
+          sx={{
+            bg: "muted",
+            p: 2,
+            borderRadius: "2px",
+            overflowX: "auto",
+          }}
+        >
+          <pre>{html}</pre>
+        </Box>
+      )}
+    </Box>
+  );
+};
+
 const Tags = () => {
   const { results, settings } = useOG();
 
@@ -328,26 +392,30 @@ const Tags = () => {
   );
 
   return (
-    <StyledTags>
-      <TagHeader>
-        <Styled.h2>Tags</Styled.h2>
-        <Settings />
-      </TagHeader>
+    <>
+      <StyledTags>
+        <TagHeader>
+          <Styled.h2>Tags</Styled.h2>
+          <Settings />
+        </TagHeader>
 
-      {settings.filters.length === 0 ? (
-        <Styled.p>No filters selected</Styled.p>
-      ) : (
-        <Table>
-          <tbody>
-            {filteredTags.map((tag, i) => (
-              <TagRow key={i} tag={tag} highlight={i % 2 === 0} />
-            ))}
+        {settings.filters.length === 0 ? (
+          <Styled.p>No filters selected</Styled.p>
+        ) : (
+          <Table>
+            <tbody>
+              {filteredTags.map((tag, i) => (
+                <TagRow key={i} tag={tag} highlight={i % 2 === 0} />
+              ))}
 
-            <AddRow highlight={filteredTags.length % 2 === 0} />
-          </tbody>
-        </Table>
-      )}
-    </StyledTags>
+              <AddRow highlight={filteredTags.length % 2 === 0} />
+            </tbody>
+          </Table>
+        )}
+      </StyledTags>
+
+      <RawHtml />
+    </>
   );
 };
 

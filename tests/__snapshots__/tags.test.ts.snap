@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`tags can generate html from tags 1`] = `
+"<title>this is title</title>
+<meta name=\\"viewport\\" content=\\"this is viewport\\" /> 
+<meta property=\\"og:title\\" content=\\"this is image\\" /> 
+<meta name=\\"twitter:title\\" value=\\"this is card\\" /> "
+`;

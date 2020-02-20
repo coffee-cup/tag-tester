@@ -4,6 +4,7 @@ import {
   isTwitterTag,
   getName,
   getValue,
+  generateTagHtml,
   getNameProp,
   editTagFromTags,
   deleteTagFromTags,
@@ -196,5 +197,16 @@ describe("tags", () => {
     expect(newTags).toEqual([tags[1], tags[2], tags[3]]);
     expect(edited.hasOwnProperty("title")).toBe(true);
     expect(edited.title).toBeUndefined();
+  });
+
+  it("can generate html from tags", () => {
+    const tags = [
+      makeTag("title", "this is title"),
+      makeTag("viewport", "this is viewport"),
+      makeTag("og:title", "this is image"),
+      makeTag("twitter:title", "this is card"),
+    ];
+
+    expect(generateTagHtml(tags)).toMatchSnapshot();
   });
 });

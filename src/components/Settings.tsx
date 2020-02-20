@@ -1,9 +1,10 @@
+/** @jsx jsx */
 import * as React from "react";
 import styled from "@emotion/styled";
 import css from "@styled-system/css";
 import { useOG } from "../context";
 import { FilterType } from "../types";
-import { Checkbox, Label } from "theme-ui";
+import { jsx, Checkbox, Label } from "theme-ui";
 
 const StyledSettings = styled.div(css({}));
 
