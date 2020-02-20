@@ -102,6 +102,7 @@ const ErrorText = styled.span(
   css({
     color: "error",
     fontSize: 1,
+    fontWeight: "normal",
   }),
 );
 
@@ -212,6 +213,7 @@ const AddRow: React.FC<{ highlight: boolean }> = props => {
   const { results, addTag } = useOG();
 
   const [isEditing, setIsEditing] = React.useState(false);
+  const [showError, setShowError] = React.useState(false);
 
   const [name, setName] = React.useState("");
   const [value, setValue] = React.useState("");
@@ -224,13 +226,31 @@ const AddRow: React.FC<{ highlight: boolean }> = props => {
     return results.tags.find(t => getName(t) === name) != null;
   }, [name, results]);
 
+  const cancelEditing = () => {
+    setIsEditing(false);
+  };
+
   const createRow = () => {
-    if (!nameExists) {
+    if (name === "" || value === "") {
+      setShowError(true);
+      return;
+    }
+
+    if (!nameExists && name !== "" && value !== "") {
       addTag(name, value);
 
       setIsEditing(false);
       setName("");
       setValue("");
+      setShowError(false);
+    }
+  };
+
+  const onKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.keyCode === 13) {
+      createRow();
+    } else if (e.keyCode === 27) {
+      cancelEditing();
     }
   };
 
@@ -245,12 +265,16 @@ const AddRow: React.FC<{ highlight: boolean }> = props => {
         {isEditing ? (
           <>
             {nameExists && <ErrorText>tag already exists</ErrorText>}
+            {showError && name === "" && (
+              <ErrorText>name cannot be empty</ErrorText>
+            )}
             <TagInput
               autoFocus
               isError={nameExists}
               value={name}
               onChange={e => setName(e.target.value)}
               placeholder="tag name"
+              onKeyUp={onKeyUp}
             />
           </>
         ) : (
@@ -271,11 +295,17 @@ const AddRow: React.FC<{ highlight: boolean }> = props => {
         </IconContainer>
 
         {isEditing ? (
-          <TagInput
-            value={value}
-            onChange={e => setValue(e.target.value)}
-            placeholder="tag value"
-          />
+          <>
+            {showError && value === "" && (
+              <ErrorText>value cannot be empty</ErrorText>
+            )}
+            <TagInput
+              value={value}
+              onChange={e => setValue(e.target.value)}
+              placeholder="tag value"
+              onKeyUp={onKeyUp}
+            />
+          </>
         ) : (
           <NewRowText>create row</NewRowText>
         )}
