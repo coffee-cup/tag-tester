@@ -33,7 +33,7 @@ const FilterButton = styled.button<{ selected?: boolean }>(props =>
     fontWeight: "bold",
     border: "none",
     borderRadius: "2px",
-    bg: "",
+    bg: "muted",
     cursor: "pointer",
     transition: "color 150ms ease-in-out",
 
