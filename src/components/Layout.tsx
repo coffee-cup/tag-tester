@@ -23,10 +23,10 @@ const Layout: React.FC<{
           <script
             async
             defer
-            src="https://hello.jakerunzer.com/app.js"
+            src="https://cdn.simpleanalytics.io/hello.js"
           ></script>
           <noscript>
-            <img src="https://hello.jakerunzer.com/image.gif" alt="" />
+            <img src="https://api.simpleanalytics.io/hello.gif" alt="" />
           </noscript>
           <link
             rel="icon"
