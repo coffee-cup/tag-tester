@@ -17,6 +17,7 @@ const Examples = () => (
     <Styled.ul>
       <ExampleLink url="tagtester.dev" />
       <ExampleLink url="github.com" />
+      <ExampleLink url="reddit.com" />
       <ExampleLink url="zeit.co" />
       <ExampleLink url="dev.to" />
     </Styled.ul>
