@@ -122,7 +122,7 @@ const Settings: React.FC = () => {
             checked={settings.syncSimilarTags}
             onChange={toggleSyncSimilar}
           />
-          Sync similar tags <i>(e.g. title and og:title)</i>
+          Sync similar tags <i>(e.g. change og:title when you edit title)</i>
         </Label>
       </Group>
 

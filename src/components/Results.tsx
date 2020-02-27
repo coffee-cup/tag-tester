@@ -397,6 +397,12 @@ const Tags = () => {
         <TagHeader>
           <Styled.h2>Tags</Styled.h2>
           <Settings />
+
+          {settings.filters.length !== 0 && (
+            <p>
+              <i>Edit tags by clicking on them</i>
+            </p>
+          )}
         </TagHeader>
 
         {settings.filters.length === 0 ? (
