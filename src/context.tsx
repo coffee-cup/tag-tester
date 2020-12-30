@@ -7,7 +7,7 @@ import {
   editTagFromTags,
   deleteTagFromTags,
 } from "./tags";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 
 export type Results =
   | {
@@ -111,8 +111,15 @@ export const OGProvider: React.FC<{
   error?: { message: string };
   url?: string;
 }> = props => {
+  const { query } = useRouter();
+
+  const url = React.useMemo(
+    () => (typeof query.url === "string" ? query.url : ""),
+    [query.url],
+  );
+
   const getState = (): State => ({
-    url: props.tagResult?.url ?? props.url ?? props.error?.message ?? "",
+    url,
     results: getResults(props.tagResult, props.error?.message),
     isUrlError:
       props.tagResult != null &&
@@ -160,7 +167,7 @@ export const OGProvider: React.FC<{
       },
     });
 
-    Router.push(`/?url=${encodeURIComponent(state.url)}`);
+    Router.push(`/${encodeURIComponent(state.url)}`);
   };
 
   const updateTags = (

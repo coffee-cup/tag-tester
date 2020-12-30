@@ -4,7 +4,7 @@ import { jsx, Box, Link, Styled } from "theme-ui";
 
 const ExampleLink: React.FC<{ url: string }> = ({ url }) => (
   <Styled.li>
-    <NextLink href={`/?url=${encodeURIComponent(url)}`}>
+    <NextLink href={`/${url}`}>
       <Link>{url}</Link>
     </NextLink>
   </Styled.li>
@@ -18,7 +18,7 @@ const Examples = () => (
       <ExampleLink url="tagtester.dev" />
       <ExampleLink url="github.com" />
       <ExampleLink url="reddit.com" />
-      <ExampleLink url="zeit.co" />
+      <ExampleLink url="vercel.com" />
       <ExampleLink url="dev.to" />
     </Styled.ul>
   </Box>
