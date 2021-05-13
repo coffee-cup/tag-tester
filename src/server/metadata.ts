@@ -2,6 +2,7 @@ import * as htmlparser2 from "htmlparser2";
 import { MetaTag } from "../types";
 import fetch from "node-fetch";
 import { prefixUrl } from "../utils";
+import decode from "unescape";
 
 export const parseTags = (html: string): MetaTag[] => {
   const tags: MetaTag[] = [];
@@ -15,7 +16,7 @@ export const parseTags = (html: string): MetaTag[] => {
         const { name, property, content, value } = attribs;
 
         if (name || property) {
-          tags.push({ name, property, content, value });
+          tags.push({ name, property, content: decode(content), value });
         }
       } else if (name === "title" && inHead) {
         readingTitle = true;
