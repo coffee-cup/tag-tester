@@ -27,7 +27,7 @@
     "unescape": "^1.0.1"
   },
   "devDependencies": {
-    "@types/htmlparser2": "^3.10.1",
+    "@types/htmlparser2": "^3.10.3",
     "@types/jest": "^25.1.2",
     "@types/next-seo": "^1.10.0",
     "@types/node": "^13.7.0",
